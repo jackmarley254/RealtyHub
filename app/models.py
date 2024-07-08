@@ -1,18 +1,19 @@
 #!/usr/bin/python3
 """ The base class for all models in the application """
 from datetime import datetime
-from sqlalchemy import Column, Integer, DateTime, ForeignKey, String,Text, Date, func
+from sqlalchemy import Column, Integer, DateTime, ForeignKey, String,Text, Date, func, Boolean
 from sqlalchemy.types import JSON
+from sqlalchemy.orm import relationship
 from app import Base
 from enum import Enum
 from flask_login import UserMixin
 
 
-class User(Base, UserMixin):
+class Onwer(Base, UserMixin):
     """ The user model
 
     Args:
-        Base (_type_): _description_
+        Base (_type_): Onwers models
     """
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
@@ -25,6 +26,58 @@ class User(Base, UserMixin):
     
     def __repr__(self):
         return f"User('{self.username}', '{self.email}', '{self.image_file}', '{self.location}', '{self.phone}')"
+
+
+    def get_id(self):
+        """ Get the user id"""
+        return self.id
+
+    
+class Tenant(Base, UserMixin):
+    """ The tenant model
+
+    Args:
+        Base (_type_): Having a separate table so we can allow tenants to have their own account
+    """
+    __tablename__ = 'tenants'
+    id = Column(Integer, primary_key=True)
+    username = Column(String(128), nullable=False)
+    password = Column(String(128), nullable=False)
+    email = Column(String(128), nullable=False)
+    phone = Column(String(128), nullable=False)
+    image_file = Column(String(128), nullable=False, default='default.jpg')
+    location = Column(String(128), nullable=False)
+    
+    def __repr__(self):
+        return f"Tenant('{self.username}', '{self.email}', '{self.image_file}', '{self.location}', '{self.phone}')"
+    
+    def get_id(self):
+        """ Get the tenant id"""
+        return self.id
+
+
+class TenantProperty(Base):
+    """ The tenant property model
+
+    Args:
+        Base (_type_): We we connect the property to the tenant
+        using many to many relationship
+        A tenant can rent many properties and a property can be rented by many tenants
+
+    Returns:
+        _type_: A relationship between the tenant and the property
+    """
+    __tablename__ = 'tenant_properties'
+    id = Column(Integer, primary_key=True)
+    tenant_id = Column(Integer, ForeignKey('tenants.id'))
+    property_id = Column(Integer, ForeignKey('properties.id'))
+    start_date = Column(Date, nullable=False)
+    end_date = Column(Date, nullable=False)
+    is_assigned = Column(Boolean, default=False)
+    
+    tenants = relationship('Tenant', backref='tenant_properties')
+    propertys = relationship('Property', backref='tenant_properties')
+
 
 class Property(Base):
     """ The property model
