@@ -8,7 +8,7 @@ from enum import Enum
 from flask_login import UserMixin
 
 
-class User(Base, UserMixin):
+class Owner(Base, UserMixin):
     """ The user model
 
     Args:
