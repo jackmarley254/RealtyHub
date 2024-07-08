@@ -5,9 +5,10 @@ from sqlalchemy import Column, Integer, DateTime, ForeignKey, String,Text, Date,
 from sqlalchemy.types import JSON
 from app import Base
 from enum import Enum
+from flask_login import UserMixin
 
 
-class User(Base):
+class User(Base, UserMixin):
     """ The user model
 
     Args:
@@ -55,7 +56,7 @@ class Property(Base):
     
     
    
-class Messages(Base):
+class Messages(Base, UserMixin):
     """Message model
 
     Args:
@@ -72,7 +73,7 @@ class Messages(Base):
     def __repr__(self):
         return f"Messages('{self.sender_id}', '{self.receiver_id}', '{self.property_id}', '{self.message}')"
         
-class PropertyStatus(Enum):
+class PropertyStatus(Enum, UserMixin):
     """Property status enum
 
     Args:
