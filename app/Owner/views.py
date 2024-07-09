@@ -130,4 +130,4 @@ def delete_property(property_id):
     db.session.delete(property)
     db.session.commit()
     flash('Your property has been deleted!', 'success')
-     return redirect(url_for('owner.view_properties'))              
+    return redirect(url_for('owner.view_properties'))              
