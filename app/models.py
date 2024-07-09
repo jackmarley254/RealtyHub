@@ -9,13 +9,13 @@ from enum import Enum
 from flask_login import UserMixin
 
 
-class Onwer(Base, UserMixin):
+class Owner(Base, UserMixin):
     """ The user model
 
     Args:
         Base (_type_): Onwers models
     """
-    __tablename__ = 'users'
+    __tablename__ = 'owners'
     id = Column(Integer, primary_key=True)
     username = Column(String(128), nullable=False)
     password = Column(String(128), nullable=False)
