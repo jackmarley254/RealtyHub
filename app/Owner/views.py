@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 """ The views for the application """
-from flask import render_template, url_for, flash, redirect, request
+from flask import render_template, url_for, flash, redirect, request, Blueprint
 from app import app, db, bcrypt
-from app.models import User, Property
-from forms import RegisterForm, LoginForm
+from app.models import Messages, Property
+from .forms import RegisterForm, LoginForm
 from flask_login import login_user, current_user, logout_user, login_required
 
 # Declare the blueprints
@@ -13,6 +13,7 @@ owner = Blueprint('owner', __name__)
 # Write the endpoints for owners
 @owner.route('/owner/register', methods=['GET', 'POST'])
 def register():
+
     if current_user.is_authenticated:
         return redirect(url_for('main.home'))
     form = RegisterForm()
