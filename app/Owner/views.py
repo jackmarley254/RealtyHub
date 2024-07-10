@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """ The views for the application """
-from flask import render_template, url_for, flash, redirect, request
+from flask import render_template, url_for, flash, redirect, request, Blueprint
 from app import app, db, bcrypt
 from app.models import User, Property
 from forms import RegisterForm, LoginForm
