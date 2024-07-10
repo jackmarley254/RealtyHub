@@ -1,10 +1,10 @@
 #!/usr/bin/python3
 """ The views for the application """
-from flask import render_template, url_for, flash, redirect, request, Blueprint, jsonify, abort
-from app import app, db, bcrypt
+from flask import render_template, url_for, flash, redirect, request, Blueprint, abort
+from app import app, db
 from app.models import Owner, Property, Tenant, PropertyStatus, TenantProperty
-from forms import PropertyForm, UpdatePropertyForm
-from flask_login import login_user, current_user, logout_user, login_required, AnonymousUserMixin
+from .forms import PropertyForm, UpdatePropertyForm
+from flask_login import current_user, login_required, AnonymousUserMixin
 
 # Declare the blueprints
 proprety = Blueprint('proprety', __name__)
@@ -180,7 +180,7 @@ def search_properties():
     render_template('#search_properties.html', properties=properties_list, limit=limit, offset=offset)
 
 
-@app.route('/properties', methods=['GET'], strict_slashes=False)
+@proprety.route('/properties', methods=['GET'], strict_slashes=False)
 @login_required
 def get_properties():
     """ Get all properties """
@@ -193,7 +193,7 @@ def get_properties():
 
     return render_template('properties.html', properties=properties, total=total_properties, limit=limit, offset=offset)
 
-@app.route('/dashboard', methods=['GET'], strict_slashes=False)
+@proprety.route('/dashboard', methods=['GET'], strict_slashes=False)
 @login_required
 def view_created_property():
     """ Allows the owner view created properties """
@@ -208,7 +208,7 @@ def view_created_property():
     
     return render_template('dashboard.html', user=user, properties=user_properties)
 
-@app.route('/property/<int:property_id>/apply', methods=['GET', 'POST'], strict_slashes=False)
+@proprety.route('/property/<int:property_id>/apply', methods=['GET', 'POST'], strict_slashes=False)
 @login_required
 def apply_property(property_id):
     """ Allows the tenant to apply for a property """

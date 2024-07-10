@@ -3,8 +3,7 @@
 from datetime import datetime
 from sqlalchemy import Column, Integer, DateTime, ForeignKey, String,Text, Date, func, Boolean
 from sqlalchemy.types import JSON
-from sqlalchemy.orm import relationship
-from sqlalchemy_utils import SQLAEnum
+from sqlalchemy.orm import relationship, Mapped
 from app import Base
 from enum import Enum
 from flask_login import UserMixin
@@ -80,7 +79,7 @@ class TenantProperty(Base):
     propertys = relationship('Property', backref='tenant_properties')
 
 
-class PropertyStatus(Enum, UserMixin):
+class PropertyStatus(Enum):
     """ The property status model
 
     Args:
@@ -92,7 +91,7 @@ class PropertyStatus(Enum, UserMixin):
     SOLD = "sold"
     RENTED = "rented"
 
-class Property(Base, UserMixin):
+class Property(Base):
     """ The property model
 
     Args:
@@ -102,13 +101,14 @@ class Property(Base, UserMixin):
     Returns:
         _type_: _description_
     """
+    __tablename__ = 'properties'
     id = Column(Integer, primary_key=True)
     title = Column(String(200), nullable=False)
     description = Column(Text, nullable=False)
     location = Column(String(200), nullable=False)
     price = Column(Integer, nullable=False)
     property_type = Column(String(200), nullable=False)
-    property_status = Column(SQLAEnum(PropertyStatus), nullable=False)
+    property_status = Mapped[PropertyStatus]
     bathrooms = Column(Integer, nullable=False)
     bedrooms = Column(Integer, nullable=False)
     size = Column(Integer, nullable=False)
@@ -129,8 +129,8 @@ class Messages(Base, UserMixin):
     """
     __tablename__ = 'messages'
     id = Column(Integer, primary_key=True)
-    sender_id = Column(Integer, ForeignKey('users.id'))
-    receiver_id = Column(Integer, ForeignKey('users.id'))
+    # sender_id = Column(Integer, ForeignKey('users.id'))
+    # receiver_id = Column(Integer, ForeignKey('users.id'))
     property_id = Column(Integer, ForeignKey('properties.id'))
     message = Column(Text, nullable=False)
     timestamp = Column(DateTime, default=datetime.utcnow)

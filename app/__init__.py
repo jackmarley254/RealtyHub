@@ -6,7 +6,6 @@ from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
 
-
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] = 'RealtyHubapp'
@@ -32,10 +31,10 @@ login_manager.session_protection = "strong"
 
 
 # Import the routes
-from app.Property import proprety
-from app.Tenant import tenant
-from app.Owner import owner
-from app.Messages import messages
+from app.Property.views import proprety
+from app.Tenant.views import tenant
+from app.Owner.views import owner
+from app.Messages.views import messages
 from app.models import Tenant, Owner
 
 
