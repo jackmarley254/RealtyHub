@@ -17,8 +17,10 @@ def register():
         return redirect(url_for('main.home'))
     form = RegisterForm()
     if form.validate_on_submit():
-        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        user = User(username=form.username.data, email=form.email.data, password_hash=hashed_password)
+        hashed_password = bcrypt.generate_password_hash(form.password.data)
+        .decode('utf-8')
+        user = User(username=form.username.data, email=form.email.data,
+                    password_hash=hashed_password)
         db.session.add(user)
         db.session.commit()
         flash('Your account has been created! You can now log in', 'success')
@@ -33,18 +35,21 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
-        if user and bcrypt.check_password_hash(user.password_hash, form.password.data):
+        if user and bcrypt.check_password_hash(user.password_hash, form.
+                                               password.data):
             login_user(user, remember=form.remember.data)
             next_page = request.args.get('next')
-            return redirect(next_page) if next_page else redirect(url_for('main.home'))
+            return redirect(next_page) if next_page else redirect
+        (url_for('main.home'))
         else:
-            flash('Login unsuccesful. Please check email and password', 'danger')
+            flash('Login unsuccesful. Please check email and
+                  password', 'danger')
     return render_template('login.html', title='Login', form=form)
 
 
 @owner.route('/owner/property/new', methods=['GET', 'POST'])
 @login_required
-def new_property()
+def new_property():
     if request.method == 'POST':
         title = request.form['title']
         description = request.form['description']
@@ -54,10 +59,9 @@ def new_property()
         bedrooms = request.form['bedrooms']
         bathrooms = request.form['bathrooms']
         size = request.form['size']
-        #amenities = request.form['amenities']
+        # amenities = request.form['amenities']
         available_from = request.form['available_from']
-        
-        
+
         new_property = Property(
             title=title,
             description=description,
@@ -67,18 +71,16 @@ def new_property()
             bedrooms=bedrooms,
             bathrooms=bathrooms,
             size=size,
-            #amenities=amenities,
+            # amenities=amenities,
             available_from=available_from,
             owner_id=current_user.id
         )
-        
-        
+
         db.session.add(new_property)
         db.session.commit()
         flash('Your property has been created!', 'success')
         return redirect(url_for('owner.view_properties'))
-    
-    
+
     return render_template('create_property.html', title='New Property')
 
 
@@ -109,16 +111,16 @@ def edit_property(property_id):
         property.bedrooms = request.form['bedrooms']
         property.bathrooms = request.form['bathrooms']
         property.size = request.form['size']
-        #property.amenities = request.form['amenities']
+        # property.amenities = request.form['amenities']
         property.available_from = request.form['available_from']
-        
-        
+
         db.session.commit()
         flash('Your property has been updated', 'success')
-        return redirect(url_for('owner.view_property', property_id=property.id))
-    
+        return redirect(url_for('owner.view_property', property_id=property
+                                .id))
 
-    return render_template('edit_property.html', title='Edit Property', property=property)
+    return render_template('edit_property.html', title='Edit Property',
+                           property=property)
 
 
 @owner.route('/owner/property/<int:property_id>/delete', methods=['POST'])
@@ -130,4 +132,4 @@ def delete_property(property_id):
     db.session.delete(property)
     db.session.commit()
     flash('Your property has been deleted!', 'success')
-    return redirect(url_for('owner.view_properties'))              
+    return redirect(url_for('owner.view_properties'))
