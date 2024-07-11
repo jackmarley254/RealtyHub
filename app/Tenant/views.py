@@ -12,26 +12,23 @@ tenant = Blueprint('tenant', __name__)
 # Write the endpoints for tenants
 @tenant.route('/tenant/register', methods=['GET', 'POST'])
 def register():
+ 
     """Register endpoint for tenants."""
     if current_user.is_authenticated:
         return redirect(url_for('tenant.dashboard'))
     form = RegisterForm()
     if form.validate_on_submit():
-        hashed_password = bcrypt.generate_password_hash(
-            form.password.data
-        ).decode('utf-8')
-        tenant = Tenant(
-            username=form.username.data,
-            email=form.email.data,
-            password=hashed_password,
-            phone=form.phone.data,
-            location=form.location.data
-        )
+        hashed_password = bcrypt.generate_password_hash(form.password.data)
+        .decode('utf-8')
+        tenant = Tenant(username=form.username.data, email=form.email.data,
+                        password=hashed_password, phone=form.phone.data,
+                        location=form.location.data)
         db.session.add(tenant)
         db.session.commit()
         flash('Your account has been created! You are now able to log in', 'success')
         return redirect(url_for('tenant.login'))
     return render_template('register.html', title='Register', form=form)
+
 
 @tenant.route('/tenant/login', methods=['GET', 'POST'])
 def login():
@@ -48,6 +45,7 @@ def login():
         else:
             flash('Login Unsuccessful. Please check email and password', 'danger')
     return render_template('login.html', title='Login', form=form)
+
 
 @tenant.route('/tenant/logout')
 def logout():
