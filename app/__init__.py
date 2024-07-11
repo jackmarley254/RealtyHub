@@ -50,9 +50,9 @@ def load_user(user_id):
     Returns:
         _type_: The user id
     """
-    user = Tenant.query.get(int(user_id))
+    user = Tenant.query.get(str(user_id))
     if user == None:
-        user = Owner.query.get(int(user_id))
+        user = Owner.query.get(str(user_id))
     return user
 
 

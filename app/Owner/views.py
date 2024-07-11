@@ -1,26 +1,29 @@
 #!/usr/bin/python3
 """ The views for the application """
-from flask import render_template, url_for, flash, redirect, request, Blueprint
+from flask import render_template, url_for, flash, redirect, request, Blueprint, abort
 from app import app, db, bcrypt
-from app.models import Messages, Property
+from app.models import Messages, Property, Owner
 from .forms import RegisterForm, LoginForm
 from flask_login import login_user, current_user, logout_user, login_required
 
 # Declare the blueprints
-owner = Blueprint('owner', __name__)
+owner = Blueprint('owner', __name__, url_prefix="/investor", template_folder='templates', static_folder='static')
+
+@owner.route('/', methods=['GET', 'POST'], strict_slashes=False)
+def owner_home():
+    return render_template('layout.html')
 
 
 # Write the endpoints for owners
-@owner.route('/owner/register', methods=['GET', 'POST'])
+@owner.route('/register', methods=['GET', 'POST'], strict_slashes=False)
 def register():
-
     if current_user.is_authenticated:
+        flash('You are already logged in', 'info')
         return redirect(url_for('main.home'))
     form = RegisterForm()
     if form.validate_on_submit():
-        hashed_password = bcrypt.generate_password_hash(form.password.data)
-        .decode('utf-8')
-        user = User(username=form.username.data, email=form.email.data,
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        user = Owner(username=form.username.data, email=form.email.data,
                     password_hash=hashed_password)
         db.session.add(user)
         db.session.commit()
@@ -29,26 +32,26 @@ def register():
     return render_template('register.html', title='Register', form=form)
 
 
-@owner.route('/owner/login', methods=['GET', 'POST'])
+@owner.route('/login', methods=['GET', 'POST'], strict_slashes=False)
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('main.home'))
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
+        user = Owner.query.filter_by(email=form.email.data).first()
         if user and bcrypt.check_password_hash(user.password_hash, form.
                                                password.data):
             login_user(user, remember=form.remember.data)
+            flash('Login successful', 'success')
             next_page = request.args.get('next')
-            return redirect(next_page) if next_page else redirect
-        (url_for('main.home'))
+            return redirect(next_page) if next_page else redirect(url_for('main.home'))
         else:
-            flash('Login unsuccesful. Please check email and
-                  password', 'danger')
+            
+            flash('Login unsuccesful. Please check email and password', 'danger')
     return render_template('login.html', title='Login', form=form)
 
 
-@owner.route('/owner/property/new', methods=['GET', 'POST'])
+@owner.route('/new', methods=['GET', 'POST'])
 @login_required
 def new_property():
     if request.method == 'POST':

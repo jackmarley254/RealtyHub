@@ -3,23 +3,23 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from app import app, db, bcrypt
 from app.models import Tenant, Property
-from .forms import RegisterForm, LoginForm
+from .forms import RegisterForm, LoginForm, UpdateUserAccount
 from flask_login import login_user, current_user, logout_user, login_required
 
 # Declare the blueprints
-tenant = Blueprint('tenant', __name__)
+tenant = Blueprint('tenant', __name__, url_prefix="/tenant", template_folder='templates', static_folder='static')
 
 # Write the endpoints for tenants
-@tenant.route('/tenant/register', methods=['GET', 'POST'])
+@tenant.route('/register', methods=['GET', 'POST'], strict_slashes=False)
 def register():
 
     """Register endpoint for tenants."""
     if current_user.is_authenticated:
-        return redirect(url_for('tenant.dashboard'))
+        flash('You are already logged in', 'info')
+        return redirect(url_for('main.home'))
     form = RegisterForm()
     if form.validate_on_submit():
-        hashed_password = bcrypt.generate_password_hash(form.password.data)
-        .decode('utf-8')
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         tenant = Tenant(username=form.username.data, email=form.email.data,
                         password=hashed_password, phone=form.phone.data,
                         location=form.location.data)
@@ -30,24 +30,25 @@ def register():
     return render_template('register.html', title='Register', form=form)
 
 
-@tenant.route('/tenant/login', methods=['GET', 'POST'])
+@tenant.route('/login', methods=['GET', 'POST'], strict_slashes=False)
 def login():
     """Login endpoint for tenants."""
     if current_user.is_authenticated:
-        return redirect(url_for('tenant.dashboard'))
+        return redirect(url_for('main.home'))
     form = LoginForm()
     if form.validate_on_submit():
         tenant = Tenant.query.filter_by(email=form.email.data).first()
         if tenant and bcrypt.check_password_hash(tenant.password, form.password.data):
             login_user(tenant, remember=form.remember_me.data)
+            flash('Login Successful', 'success')
             next_page = request.args.get('next')
-            return redirect(next_page) if next_page else redirect(url_for('tenant.dashboard'))
+            return redirect(next_page) if next_page else redirect(url_for('main.home'))
         else:
             flash('Login Unsuccessful. Please check email and password', 'danger')
     return render_template('login.html', title='Login', form=form)
 
 
-@tenant.route('/tenant/logout')
+@tenant.route('/logout')
 def logout():
     """Logout endpoint for tenants."""
     logout_user()
