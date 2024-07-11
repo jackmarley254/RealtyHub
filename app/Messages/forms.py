@@ -3,7 +3,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
-from app.models import Message
+from app.models import Messages
 
 
 class MessageForm(FlaskForm):
