@@ -35,6 +35,7 @@ from app.Property.views import proprety
 from app.Tenant.views import tenant
 from app.Owner.views import owner
 from app.Messages.views import messages
+from app.utils import main
 from app.models import Tenant, Owner
 
 
@@ -60,3 +61,4 @@ app.register_blueprint(proprety)
 app.register_blueprint(tenant)
 app.register_blueprint(owner)
 app.register_blueprint(messages)
+app.register_blueprint(main)
