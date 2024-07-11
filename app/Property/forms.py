@@ -22,7 +22,8 @@ class PropertyForm(FlaskForm):
     property_status = StringField('Property Status', validators=[DataRequired()])
     bathrooms = StringField('Bathrooms', validators=[DataRequired()])
     bedrooms = StringField('Bedrooms', validators=[DataRequired()])
-    size = StringField('Size', validators=[DataRequired()])
+    size = StringField('Size(sq ft)', validators=[DataRequired()])
+    available_from = StringField('Available From', validators=[DataRequired()])
     submit = SubmitField('Create Property')
 
 

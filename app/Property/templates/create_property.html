@@ -1,0 +1,154 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="content-section">
+    <form method="POST" action="" class="mx-auto">
+        {{ form.hidden_tag() }}
+        <legend class="border-bottom mb-3">Create Property</legend>
+        
+        <div class="form-group">
+            {{ form.title.label(class="form-control-label") }}
+            {% if form.title.errors %}
+                {{ form.title(class="form-control is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.title.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.title(class="form-control") }}
+            {% endif %}
+        </div>
+        
+        <div class="form-group mt-3">
+            {{ form.description.label(class="form-control-label") }}
+            {% if form.description.errors %}
+                {{ form.description(class="form-control is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.description.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.description(class="form-control", rows="3") }}
+            {% endif %}
+        </div>
+        
+        <div class="form-group mt-3">
+            {{ form.price.label(class="form-control-label") }}
+            {% if form.price.errors %}
+                {{ form.price(class="form-control is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.price.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.price(class="form-control") }}
+            {% endif %}
+        </div>
+        
+        <div class="form-group mt-3">
+            {{ form.location.label(class="form-control-label") }}
+            {% if form.location.errors %}
+                {{ form.location(class="form-control is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.location.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.location(class="form-control") }}
+            {% endif %}
+        </div>
+        
+        <div class="form-group mt-3">
+            {{ form.property_type.label(class="form-control-label") }}
+            {% if form.property_type.errors %}
+                {{ form.property_type(class="form-control is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.property_type.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.property_type(class="form-control") }}
+            {% endif %}
+        </div>
+        
+        <div class="form-group mt-3">
+            {{ form.property_status.label(class="form-control-label") }}
+            {% if form.property_status.errors %}
+                {{ form.property_status(class="form-control is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.property_status.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.property_status(class="form-control") }}
+            {% endif %}
+        </div>
+        
+        <div class="form-group mt-3">
+            {{ form.bedrooms.label(class="form-control-label") }}
+            {% if form.bedrooms.errors %}
+                {{ form.bedrooms(class="form-control is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.bedrooms.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.bedrooms(class="form-control") }}
+            {% endif %}
+        </div>
+        
+        <div class="form-group mt-3">
+            {{ form.bathrooms.label(class="form-control-label") }}
+            {% if form.bathrooms.errors %}
+                {{ form.bathrooms(class="form-control is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.bathrooms.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.bathrooms(class="form-control") }}
+            {% endif %}
+        </div>
+        
+        <div class="form-group mt-3">
+            {{ form.size.label(class="form-control-label") }}
+            {% if form.size.errors %}
+                {{ form.size(class="form-control is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.size.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.size(class="form-control") }}
+            {% endif %}
+        </div>
+        
+        <div class="form-group mt-3">
+            {{ form.available_from.label(class="form-control-label") }}
+            {% if form.available_from.errors %}
+                {{ form.available_from(class="form-control is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.available_from.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.available_from(class="form-control") }}
+            {% endif %}
+        </div>
+        
+        <div class="form-group mt-3 d-flex justify-content-end">
+            {{ form.submit(class="btn btn-primary btn-sm mt-3") }}
+        </div>
+    </form>
+</div>
+{% endblock %}
