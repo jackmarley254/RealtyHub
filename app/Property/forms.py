@@ -2,8 +2,9 @@
 """ Forms for the property application """
 """ Forms for the application """
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField,DateField, IntegerField, TextAreaField, SelectField
+from wtforms import StringField, PasswordField, SubmitField,DateField, IntegerField, TextAreaField, SelectField, FileField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, NumberRange
+from flask_wtf.file import FileAllowed
 from app.models import Property
 
 
@@ -24,6 +25,9 @@ class PropertyForm(FlaskForm):
     bathrooms = IntegerField('Bathrooms', validators=[DataRequired(), NumberRange(min=1)])
     size = IntegerField('Size (sq ft)', validators=[DataRequired(), NumberRange(min=0)])
     available_from = DateField('Available From', format='%Y-%m-%d', validators=[DataRequired()])
+    image1 = FileField('Image 1', validators=[FileAllowed(['jpg', 'png', 'jpeg'], 'Images only!')])
+    image2 = FileField('Image 2', validators=[FileAllowed(['jpg', 'png', 'jpeg'], 'Images only!')])
+    image3 = FileField('Image 3', validators=[FileAllowed(['jpg', 'png', 'jpeg'], 'Images only!')])
     submit = SubmitField('Create Property')
 
 class UpdatePropertyForm(FlaskForm):
