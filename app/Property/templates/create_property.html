@@ -1,11 +1,9 @@
 {% extends "layout.html" %}
-
 {% block content %}
-<div class="content-section">
+<div class="container mt-5">
+    <h2>Create Property</h2>
     <form method="POST" action="" class="mx-auto">
         {{ form.hidden_tag() }}
-        <legend class="border-bottom mb-3">Create Property</legend>
-        
         <div class="form-group">
             {{ form.title.label(class="form-control-label") }}
             {% if form.title.errors %}
@@ -19,7 +17,6 @@
                 {{ form.title(class="form-control") }}
             {% endif %}
         </div>
-        
         <div class="form-group mt-3">
             {{ form.description.label(class="form-control-label") }}
             {% if form.description.errors %}
@@ -30,10 +27,9 @@
                     {% endfor %}
                 </div>
             {% else %}
-                {{ form.description(class="form-control", rows="3") }}
+                {{ form.description(class="form-control") }}
             {% endif %}
         </div>
-        
         <div class="form-group mt-3">
             {{ form.price.label(class="form-control-label") }}
             {% if form.price.errors %}
@@ -47,7 +43,6 @@
                 {{ form.price(class="form-control") }}
             {% endif %}
         </div>
-        
         <div class="form-group mt-3">
             {{ form.location.label(class="form-control-label") }}
             {% if form.location.errors %}
@@ -61,7 +56,6 @@
                 {{ form.location(class="form-control") }}
             {% endif %}
         </div>
-        
         <div class="form-group mt-3">
             {{ form.property_type.label(class="form-control-label") }}
             {% if form.property_type.errors %}
@@ -75,7 +69,6 @@
                 {{ form.property_type(class="form-control") }}
             {% endif %}
         </div>
-        
         <div class="form-group mt-3">
             {{ form.property_status.label(class="form-control-label") }}
             {% if form.property_status.errors %}
@@ -89,7 +82,6 @@
                 {{ form.property_status(class="form-control") }}
             {% endif %}
         </div>
-        
         <div class="form-group mt-3">
             {{ form.bedrooms.label(class="form-control-label") }}
             {% if form.bedrooms.errors %}
@@ -103,7 +95,6 @@
                 {{ form.bedrooms(class="form-control") }}
             {% endif %}
         </div>
-        
         <div class="form-group mt-3">
             {{ form.bathrooms.label(class="form-control-label") }}
             {% if form.bathrooms.errors %}
@@ -117,7 +108,6 @@
                 {{ form.bathrooms(class="form-control") }}
             {% endif %}
         </div>
-        
         <div class="form-group mt-3">
             {{ form.size.label(class="form-control-label") }}
             {% if form.size.errors %}
@@ -131,7 +121,6 @@
                 {{ form.size(class="form-control") }}
             {% endif %}
         </div>
-        
         <div class="form-group mt-3">
             {{ form.available_from.label(class="form-control-label") }}
             {% if form.available_from.errors %}
@@ -145,9 +134,8 @@
                 {{ form.available_from(class="form-control") }}
             {% endif %}
         </div>
-        
-        <div class="form-group mt-3 d-flex justify-content-end">
-            {{ form.submit(class="btn btn-primary btn-sm mt-3") }}
+        <div class="form-group d-flex justify-content-end mt-3">
+            {{ form.submit(class="btn btn-primary") }}
         </div>
     </form>
 </div>

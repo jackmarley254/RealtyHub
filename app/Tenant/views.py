@@ -34,6 +34,7 @@ def register():
 def login():
     """Login endpoint for tenants."""
     if current_user.is_authenticated:
+        flash(f'You are already logged in as {current_user.username}', 'info')
         return redirect(url_for('main.home'))
     form = LoginForm()
     if form.validate_on_submit():
