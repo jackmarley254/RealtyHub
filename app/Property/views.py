@@ -2,64 +2,59 @@
 """ The views for the application """
 from flask import render_template, url_for, flash, redirect, request, Blueprint, abort
 from app import app, db
+from datetime import datetime
 from app.models import Owner, Property, Tenant, PropertyStatus, TenantProperty
 from .forms import PropertyForm, UpdatePropertyForm
 from flask_login import current_user, login_required, AnonymousUserMixin
 
 # Declare the blueprints
-proprety = Blueprint('proprety', __name__)
+proprety = Blueprint('proprety', __name__, url_prefix="/property", template_folder='templates', static_folder='static')
 
 
 # Write the endpoints for properties
-@proprety.route('/property/add', methods=['GET', 'POST'], strict_slashes=False)
+@proprety.route('/add_new', methods=['GET', 'POST'], strict_slashes=False)
 @login_required
 def create_property():
     """ Allows the owner to add a property """
     # Checking if the current user is authenticated
     if not current_user.is_authenticated or isinstance(current_user, AnonymousUserMixin):
         flash('You have to be logged in before you can post a property!', 'warning')
-        return redirect(url_for("#"))
+        return redirect(url_for("main.home"))
     
     # We check if the current_user is a Tenant
     if isinstance(current_user, Tenant):
-        flash('You can not post a Job!', 'danger')
-        return redirect(url_for("#"))
+        flash('You cannot create a property!', 'danger')
+        return redirect(url_for("main.home"))
     
     # if the current_user is an Owner
     form = PropertyForm()
     if form.validate_on_submit():
-        title = request.form.get('title')
-        description = request.form.get('description')
-        price = request.form.get('price')
-        location = request.form.get('location')
-        property_type = request.form.get('property_type')
-        bedrooms = request.form.get('bedrooms')
-        bathrooms = request.form.get('bathrooms')
-        size = request.form.get('size')
-        amenities = request.form.get('amenities')
-        available_from = request.form.get('available_from')
-
+        print('yes')
         new_property = Property(
-            title=title,
-            description=description,
-            price=price,
-            location=location,
-            property_type=property_type,
-            bedrooms=bedrooms,
-            bathrooms=bathrooms,
-            size=size,
-            amenities=amenities,
-            available_from=available_from,
+            title=form.title.data,
+            description=form.description.data,
+            price=int(form.price.data),
+            location=form.location.data,
+            property_type=form.property_type.data,
+            bedrooms=int(form.bedrooms.data),
+            bathrooms=int(form.bathrooms.data),
+            size=int(form.size.data),
+            # amenities=form.amenities.data,
+            available_from = datetime.strptime(form.available_from.data, '%Y-%m-%d'),
             owner_id=current_user.id
         )
 
-        db.session.add(new_property)
-        db.session.commit()
+        try:
+            db.session.add(new_property)
+            db.session.commit()
+            flash('Property posted successfully', 'success')
+            return redirect(url_for('main.home'))
+        except Exception as e:
+            db.session.rollback()
+            flash(f'Error posting property: {str(e)}', 'danger')
+    
+    return render_template('create_property.html', form=form)
 
-        # return jsonify({'message': 'Property posted successfully', 'property': new_property.id}), 201
-        flash('Property posted successfully', 'success')
-        return redirect(url_for('#dasboard'))
-    render_template('#create_property.html', form=form)
     
 
 
@@ -123,7 +118,7 @@ def view_property(property_id):
     # return jsonify({'property': property}), 200
     
 
-@proprety.route('/property/search', methods=['GET', 'POST'], strict_slashes=False)
+@proprety.route('/search', methods=['GET', 'POST'], strict_slashes=False)
 # @login_required
 def search_properties():
     # Search for properties
