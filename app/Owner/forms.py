@@ -27,7 +27,7 @@ class RegisterForm(FlaskForm):
         Raises:
             ValidationError: Raises a validation error if the email already exists
         """
-        user_email = Onwer.query.filter_by(email=email.data).first()
+        user_email = Owner.query.filter_by(email=email.data).first()
         if user_email:
             raise ValidationError('Email already exists. Please use a different email address')
 
@@ -42,7 +42,7 @@ class RegisterForm(FlaskForm):
         Raises:
             ValidationError: Raises a validation error if the username already exists
         """
-        user_name = Onwer.query.filter_by(username=username.data).first()
+        user_name = Owner.query.filter_by(username=username.data).first()
         if user_name:
             raise ValidationError('Username already exists. Please use a different username')
 

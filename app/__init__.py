@@ -24,8 +24,8 @@ bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
 login_manager.init_app(app)
 login_manager.blueprint_login_views = {
-    'tenant': '/tenant/login',
-    'owner': '/owner/login'
+    'tenant': 'tenant.login',
+    'owner': 'investor.login'
 }
 login_manager.session_protection = "strong"
 
@@ -35,6 +35,7 @@ from app.Property.views import proprety
 from app.Tenant.views import tenant
 from app.Owner.views import owner
 from app.Messages.views import messages
+from app.utils import main
 from app.models import Tenant, Owner
 
 
@@ -49,10 +50,11 @@ def load_user(user_id):
     Returns:
         _type_: The user id
     """
-    user = Tenant.query.get(int(user_id))
-    if user == None:
-        user = Owner.query.get(int(user_id))
-    return user
+    x = Owner.query.get(str(user_id))
+    if x == None:
+        x = Tenant.query.get(str(user_id))
+        
+    return x
 
 
 # Register the blueprints
@@ -60,3 +62,4 @@ app.register_blueprint(proprety)
 app.register_blueprint(tenant)
 app.register_blueprint(owner)
 app.register_blueprint(messages)
+app.register_blueprint(main)
