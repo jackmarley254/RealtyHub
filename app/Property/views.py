@@ -7,7 +7,7 @@ from flask import render_template, url_for, flash, redirect, request, Blueprint,
 from app import app, db
 from datetime import datetime
 from app.models import Owner, Property, Tenant, PropertyStatus, TenantProperty
-from .forms import PropertyForm, UpdatePropertyForm
+from .forms import PropertyForm, UpdatePropertyForm, SearchForm
 from flask_login import current_user, login_required, AnonymousUserMixin
 
 # Declare the blueprints
@@ -76,9 +76,6 @@ def create_property():
     return render_template('create_property.html', form=form)
 
 
-    
-
-
 @proprety.route('/<int:property_id>/update', methods=['GET', 'POST'], strict_slashes=False)
 @login_required
 def update_property(property_id):
@@ -140,61 +137,61 @@ def view_property(property_id):
     
 
 @proprety.route('/search', methods=['GET', 'POST'], strict_slashes=False)
-# @login_required
 def search_properties():
-    # Search for properties
-    # Seems we will allow any user to search for properties but hold them when they want to appy for the property
-    location = request.args.get('location')
-    min_price = request.args.get('min_price')
-    max_price = request.args.get('max_price')
-    property_type = request.args.get('property_type')
-    property_status = request.args.get('property_status')  # sale or rent
-    min_bedrooms = request.args.get('min_bedrooms')
-    min_bathrooms = request.args.get('min_bathrooms')
-    limit = int(request.args.get('limit', 10))
-    offset = int(request.args.get('offset', 0))
+    form = SearchForm()
+    properties_list = []
+    if form.validate_on_submit():
+        location = form.location.data
+        min_price = form.min_price.data
+        max_price = form.max_price.data
+        property_type = form.property_type.data
+        property_status = form.property_status.data
+        min_bedrooms = form.min_bedrooms.data
+        min_bathrooms = form.min_bathrooms.data
+        limit = 10
+        offset = 0
 
-    query = Property.query
+        query = Property.query
 
-    if location:
-        query = query.filter(Property.location == location)
-    if min_price:
-        query = query.filter(Property.price >= min_price)
-    if max_price:
-        query = query.filter(Property.price <= max_price)
-    if property_type:
-        query = query.filter(Property.property_type == property_type)
-    if property_status:
-        query = query.filter(Property.property_status == property_status)
-    if min_bedrooms:
-        query = query.filter(Property.bedrooms >= min_bedrooms)
-    if min_bathrooms:
-        query = query.filter(Property.bathrooms >= min_bathrooms)
+        if location:
+            query = query.filter(Property.location == location)
+        if min_price is not None:
+            query = query.filter(Property.price >= min_price)
+        if max_price is not None:
+            query = query.filter(Property.price <= max_price)
+        if property_type:
+            query = query.filter(Property.property_type == property_type)
+        if property_status:
+            query = query.filter(Property.property_status == property_status)
+        if min_bedrooms is not None:
+            query = query.filter(Property.bedrooms >= min_bedrooms)
+        if min_bathrooms is not None:
+            query = query.filter(Property.bathrooms >= min_bathrooms)
 
-    properties = query.limit(limit).offset(offset).all()
-    properties_list = [
-        {
-            'id': property.id,
-            'title': property.title,
-            'description': property.description,
-            'price': property.price,
-            'location': property.location,
-            'property_type': property.property_type,
-            'property_status': property.property_status,
-            'bedrooms': property.bedrooms,
-            'bathrooms': property.bathrooms,
-            'size': property.size,
-            'amenities': property.amenities,
-            'available_from': property.available_from,
-            'owner_id': property.owner_id,
-            'created_at': property.created_at,
-            'updated_at': property.updated_at
-        }
-        for property in properties
-    ]
-    # return jsonify(properties_list), 200
-    render_template('#search_properties.html', properties=properties_list, limit=limit, offset=offset)
-    
+        properties = query.limit(limit).offset(offset).all()
+        properties_list = [
+            {
+                'id': property.id,
+                'title': property.title,
+                'description': property.description,
+                'price': property.price,
+                'location': property.location,
+                'property_type': property.property_type,
+                'property_status': property.property_status,
+                'bedrooms': property.bedrooms,
+                'bathrooms': property.bathrooms,
+                'size': property.size,
+                'amenities': property.amenities,
+                'available_from': property.available_from,
+                'owner_id': property.owner_id,
+                'created_at': property.created_at,
+                'updated_at': property.updated_at
+            }
+            for property in properties
+        ]
+
+    return render_template('search.html', form=form, properties=properties_list)
+ 
 
 @proprety.route('/properties', methods=['GET'], strict_slashes=False)
 @login_required

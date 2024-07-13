@@ -7,41 +7,18 @@
         <div class="col">
             <div class="card h-100">
                 {% if property.image1 %}
-                <img src="{{ url_for('static', filename='property_pics/' + property.image1) }}" class="card-img-top" alt="...">
+                <a href="{{ url_for('proprety.view_property', property_id=property.id) }}">
+                    <img src="{{ url_for('static', filename='property_pics/' + property.image1) }}" class="card-img-top" alt="...">
+                </a>
                 {% else %}
-                <img src="{{ url_for('static', filename='property_pics/default.jpg') }}" class="card-img-top" alt="No Image Available">
+                <a href="{{ url_for('proprety.view_property', property_id=property.id) }}">
+                    <img src="{{ url_for('static', filename='property_pics/default.jpg') }}" class="card-img-top" alt="No Image Available">
+                </a>
                 {% endif %}
                 <div class="card-body">
                     <h5 class="card-title">{{ property.title }}</h5>
                     <p class="card-text">{{ property.description }}</p>
                     <p class="card-text"><strong>Price:</strong> ${{ property.price }}</p>
-                    <div id="carouselExample{{ property.id }}" class="carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-inner">
-                            {% if property.image1 %}
-                            <div class="carousel-item active">
-                                <img src="{{ url_for('static', filename='property_pics/' + property.image1) }}" class="d-block w-100" alt="...">
-                            </div>
-                            {% endif %}
-                            {% if property.image2 %}
-                            <div class="carousel-item {% if not property.image1 %}active{% endif %}">
-                                <img src="{{ url_for('static', filename='property_pics/' + property.image2) }}" class="d-block w-100" alt="...">
-                            </div>
-                            {% endif %}
-                            {% if property.image3 %}
-                            <div class="carousel-item {% if not property.image1 and not property.image2 %}active{% endif %}">
-                                <img src="{{ url_for('static', filename='property_pics/' + property.image3) }}" class="d-block w-100" alt="...">
-                            </div>
-                            {% endif %}
-                        </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample{{ property.id }}" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Previous</span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExample{{ property.id }}" data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Next</span>
-                        </button>
-                    </div>
                     <ul class="list-inline mt-3">
                         <li class="list-inline-item">
                             <i class="fas fa-home"></i> {{ property.property_type }}

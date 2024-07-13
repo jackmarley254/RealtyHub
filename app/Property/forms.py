@@ -3,7 +3,7 @@
 """ Forms for the application """
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField,DateField, IntegerField, TextAreaField, SelectField, FileField
-from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, NumberRange
+from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, NumberRange, Optional
 from flask_wtf.file import FileAllowed
 from app.models import Property
 
@@ -46,3 +46,19 @@ class UpdatePropertyForm(FlaskForm):
     bedrooms = StringField('Bedrooms', validators=[DataRequired()])
     size = StringField('Size', validators=[DataRequired()])
     submit = SubmitField('Update Property')
+
+
+class SearchForm(FlaskForm):
+    """ The search form
+
+    Args:
+        FlaskForm (_type_): _description_
+    """
+    location = StringField('Location', validators=[Optional()])
+    min_price = IntegerField('Min Price', validators=[Optional(), NumberRange(min=0)])
+    max_price = IntegerField('Max Price', validators=[Optional(), NumberRange(min=0)])
+    property_type = SelectField('Property Type', choices=[('', 'Any'), ('House', 'House'), ('Apartment', 'Apartment'), ('Condo', 'Condo')], validators=[Optional()])
+    property_status = SelectField('Property Status', choices=[('', 'Any'), ('For Sale', 'For Sale'), ('For Rent', 'For Rent')], validators=[Optional()])
+    min_bedrooms = IntegerField('Min Bedrooms', validators=[Optional(), NumberRange(min=0)])
+    min_bathrooms = IntegerField('Min Bathrooms', validators=[Optional(), NumberRange(min=0)])
+    submit = SubmitField('Search')
