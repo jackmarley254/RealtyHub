@@ -40,7 +40,7 @@ def create_property():
             bathrooms=int(form.bathrooms.data),
             size=int(form.size.data),
             # amenities=form.amenities.data,
-            available_from = datetime.strptime(form.available_from.data, '%Y-%m-%d'),
+            available_from = datetime.strptime(str(form.available_from.data), '%Y-%m-%d'),
             owner_id=current_user.id
         )
 
