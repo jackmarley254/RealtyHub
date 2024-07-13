@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container mt-5">
+    <h2>Properties</h2>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for property in properties %}
+        <div class="col">
+            <div class="card h-100">
+                {% if property.image1 %}
+                <a href="{{ url_for('proprety.view_property', property_id=property.id) }}">
+                    <img src="{{ url_for('static', filename='property_pics/' + property.image1) }}" class="card-img-top" alt="...">
+                </a>
+                {% else %}
+                <a href="{{ url_for('proprety.view_property', property_id=property.id) }}">
+                    <img src="{{ url_for('static', filename='property_pics/default.jpg') }}" class="card-img-top" alt="No Image Available">
+                </a>
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ property.title }}</h5>
+                    <p class="card-text">{{ property.description }}</p>
+                    <p class="card-text"><strong>Price:</strong> ${{ property.price }}</p>
+                    <ul class="list-inline mt-3">
+                        <li class="list-inline-item">
+                            <i class="fas fa-home"></i> {{ property.property_type }}
+                        </li>
+                        <li class="list-inline-item">
+                            <i class="fas fa-bed"></i> {{ property.bedrooms }} bd
+                        </li>
+                        <li class="list-inline-item">
+                            <i class="fas fa-bath"></i> {{ property.bathrooms }} ba
+                        </li>
+                        <li class="list-inline-item">
+                            <i class="fas fa-ruler-combined"></i> {{ property.size }} sqft
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="d-flex justify-content-center mt-4">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li class="page-item {% if not pagination.has_prev %}disabled{% endif %}">
+                    <a class="page-link" href="{{ url_for('proprety.get_properties', page=pagination.prev_num) }}">Previous</a>
+                </li>
+                {% for page_num in pagination.iter_pages() %}
+                    <li class="page-item {% if pagination.page == page_num %}active{% endif %}">
+                        <a class="page-link" href="{{ url_for('proprety.get_properties', page=page_num) }}">{{ page_num }}</a>
+                    </li>
+                {% endfor %}
+                <li class="page-item {% if not pagination.has_next %}disabled{% endif %}">
+                    <a class="page-link" href="{{ url_for('proprety.get_properties', page=pagination.next_num) }}">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+{% endblock %}
