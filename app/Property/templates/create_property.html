@@ -2,7 +2,7 @@
 {% block content %}
 <div class="container mt-5">
     <h2>Create Property</h2>
-    <form method="POST" action="" class="mx-auto">
+    <form method="POST" action="" enctype="multipart/form-data">
         {{ form.hidden_tag() }}
         <div class="form-group">
             {{ form.title.label(class="form-control-label") }}
@@ -134,7 +134,46 @@
                 {{ form.available_from(class="form-control") }}
             {% endif %}
         </div>
-        <div class="form-group d-flex justify-content-end mt-3">
+        <div class="form-group mt-3">
+            {{ form.image1.label(class="form-control-label") }}
+            {% if form.image1.errors %}
+                {{ form.image1(class="form-control is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.image1.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.image1(class="form-control") }}
+            {% endif %}
+        </div>
+        <div class="form-group mt-3">
+            {{ form.image2.label(class="form-control-label") }}
+            {% if form.image2.errors %}
+                {{ form.image2(class="form-control is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.image2.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.image2(class="form-control") }}
+            {% endif %}
+        </div>
+        <div class="form-group mt-3">
+            {{ form.image3.label(class="form-control-label") }}
+            {% if form.image3.errors %}
+                {{ form.image3(class="form-control is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.image3.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.image3(class="form-control") }}
+            {% endif %}
+        </div>
+        <div class="form-group mt-3">
             {{ form.submit(class="btn btn-primary") }}
         </div>
     </form>
