@@ -6,6 +6,7 @@ import secrets
 from flask import render_template, url_for, flash, redirect, request, Blueprint, abort, current_app
 from app import app, db
 from datetime import datetime
+from PIL import Image
 from app.models import Owner, Property, Tenant, PropertyStatus, TenantProperty
 from .forms import PropertyForm, UpdatePropertyForm, SearchForm
 from flask_login import current_user, login_required, AnonymousUserMixin
@@ -16,12 +17,20 @@ proprety = Blueprint('proprety', __name__, url_prefix="/property", template_fold
 
 
 def save_picture(form_picture):
-    """ Save the picture to the file system """
     random_hex = secrets.token_hex(8)
-    _, f_ext = os.path.splitext(secure_filename(form_picture.filename))
+    _, f_ext = os.path.splitext(form_picture.filename)
     picture_fn = random_hex + f_ext
     picture_path = os.path.join(current_app.root_path, 'static/property_pics', picture_fn)
-    form_picture.save(picture_path)
+
+    # Ensure the directory exists
+    os.makedirs(os.path.dirname(picture_path), exist_ok=True)
+
+    # Save the picture
+    output_size = (125, 125)
+    i = Image.open(form_picture)
+    i.thumbnail(output_size)
+    i.save(picture_path)
+
     return picture_fn
 
 @proprety.route('/add_new', methods=['GET', 'POST'], strict_slashes=False)
