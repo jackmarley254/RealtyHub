@@ -52,12 +52,8 @@ def create_property():
             bedrooms=int(form.bedrooms.data),
             bathrooms=int(form.bathrooms.data),
             size=int(form.size.data),
-<<<<<<< HEAD
             # amenities=form.amenities.data,
-            available_from = datetime.strptime(str(form.available_from.data), '%Y-%m-%d'),
-=======
             available_from=datetime.strptime(str(form.available_from.data), '%Y-%m-%d'),
->>>>>>> my-branch
             owner_id=current_user.id
         )
 
