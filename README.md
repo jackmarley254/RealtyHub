@@ -5,7 +5,6 @@
 
 ## Table of Contents
 - [Introduction](#introduction)
-- [Project Structure](#project-structure)
 - [Features](#features)
 - [Database Models](#database-models)
 - [API Endpoints](#api-endpoints)
@@ -105,5 +104,5 @@ class User(db.Model):
 ## Authors
 - George
 - Godswill
-- Jackson (github.com/jackmarley254)
+- Jackson [github.com/jackmarley254]
 - Janefrancis
