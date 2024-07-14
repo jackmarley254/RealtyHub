@@ -27,6 +27,7 @@ This real estate web application allows users to buy, sell, rent, and post prope
 
 ## Database Models
 ### User Model
+```python
 from your_application import db
 
 class User(db.Model):
@@ -98,8 +99,7 @@ class User(db.Model):
                 "email": "example@example.com",
                 "password": "password123"
             }
-
-
+```
 ## Authors
 - George
 - Godswill
