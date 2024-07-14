@@ -39,6 +39,7 @@ class User(db.Model):
     sent_messages = db.relationship('Message', foreign_keys='Message.sender_id', backref='sender', lazy=True)
     received_messages = db.relationship('Message', foreign_keys='Message.receiver_id', backref='receiver', lazy=True)
 
+
 * Property Model
 
 class Property(db.Model):
@@ -58,14 +59,14 @@ class Property(db.Model):
     photos = db.relationship('Photo', backref='property', lazy=True)
     messages = db.relationship('Message', backref='property', lazy=True)
 
-
+----------
 * Photo Model
 
 class Photo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     url = db.Column(db.String(200), nullable=False)
     property_id = db.Column(db.Integer, db.ForeignKey('property.id'), nullable=False)
-
+----------
 * Message Model
 from datetime import datetime
 
