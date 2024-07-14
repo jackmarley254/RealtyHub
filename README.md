@@ -1,8 +1,7 @@
 # Real Estate Web Application 
---------
 
-## This README file provides a comprehensive guide to your real estate web application, covering the introduction, project structure, features, database models, API endpoints, frontend implementation, authentication and authorization, and authors.
----------
+
+### This README file provides a comprehensive guide to your real estate web application, covering the introduction, project structure, features, database models, API endpoints, frontend implementation, authentication and authorization, and authors.
 
 ## Table of Contents
 - [Introduction](#introduction)
@@ -107,5 +106,5 @@ Request:
 ### Authors
 - George
 - Godswill
-- [Jackson](jackndiritu97@gmail.com)
+- Jackson
 - Janefrancis
