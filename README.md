@@ -1,7 +1,7 @@
 # Real Estate Web Application 
 --------
 
-This README file provides a comprehensive guide to your real estate web application, covering the introduction, project structure, features, database models, API endpoints, frontend implementation, authentication and authorization, and authors.
+## This README file provides a comprehensive guide to your real estate web application, covering the introduction, project structure, features, database models, API endpoints, frontend implementation, authentication and authorization, and authors.
 ---------
 
 ## Table of Contents
@@ -16,35 +16,6 @@ This README file provides a comprehensive guide to your real estate web applicat
 
 ## Introduction
 This real estate web application allows users to buy, sell, rent, and post properties. Built using React.js for the frontend, Flask for the backend, and MySQL for the database, it supports user registration, authentication, and features like property search, messaging, and property management.
-
-## Project Structure
-### Backend (Flask)
-
-real_estate_app/
-├── app/
-│ ├── init.py
-│ ├── models.py
-│ ├── routes/
-│ │ ├── init.py
-│ │ ├── auth.py
-│ │ ├── properties.py
-│ │ ├── messages.py
-│ ├── utils.py
-├── migrations/
-├── config.py
-├── run.py
-├── requirements.txt
-
-### Frontend (React.js)
-
-real_estate_frontend/
-├── public/
-├── src/
-│ ├── components/
-│ ├── pages/
-│ ├── App.js
-│ ├── index.js
-├── package.json
 
 ## Features
 - User Registration and Authentication
@@ -131,3 +102,10 @@ Request:
     "email": "example@example.com",
     "password": "password123"
 }
+
+
+### Authors
+- George
+- Godswill
+- [Jackson](jackndiritu97@gmail.com)
+- Janefrancis
