@@ -27,7 +27,6 @@ This real estate web application allows users to buy, sell, rent, and post prope
 
 ## Database Models
 ### User Model
- ```python
 from your_application import db
 
 class User(db.Model):
@@ -40,69 +39,69 @@ class User(db.Model):
     received_messages = db.relationship('Message', foreign_keys='Message.receiver_id', backref='receiver', lazy=True)
 
 
-* Property Model
+    * Property Model
 
-class Property(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(200), nullable=False)
-    description = db.Column(db.Text, nullable=False)
-    price = db.Column(db.Float, nullable=False)
-    location = db.Column(db.String(200), nullable=False)
-    property_type = db.Column(db.String(50), nullable=False)
-    bedrooms = db.Column(db.Integer)
-    bathrooms = db.Column(db.Integer)
-    owner_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    size = db.Column(db.Float)
-    amenities = db.Column(db.String(200))
-    available_from = db.Column(db.Date)
-    status = db.Column(db.String(50), default='available')
-    photos = db.relationship('Photo', backref='property', lazy=True)
-    messages = db.relationship('Message', backref='property', lazy=True)
-
-----------
-* Photo Model
-
-class Photo(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    url = db.Column(db.String(200), nullable=False)
-    property_id = db.Column(db.Integer, db.ForeignKey('property.id'), nullable=False)
-----------
-* Message Model
-from datetime import datetime
-
-class Message(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    sender_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    receiver_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    property_id = db.Column(db.Integer, db.ForeignKey('property.id'), nullable=False)
-    content = db.Column(db.Text, nullable=False)
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    class Property(db.Model):
+        id = db.Column(db.Integer, primary_key=True)
+        title = db.Column(db.String(200), nullable=False)
+        description = db.Column(db.Text, nullable=False)
+        price = db.Column(db.Float, nullable=False)
+        location = db.Column(db.String(200), nullable=False)
+        property_type = db.Column(db.String(50), nullable=False)
+        bedrooms = db.Column(db.Integer)
+        bathrooms = db.Column(db.Integer)
+        owner_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+        size = db.Column(db.Float)
+        amenities = db.Column(db.String(200))
+        available_from = db.Column(db.Date)
+        status = db.Column(db.String(50), default='available')
+        photos = db.relationship('Photo', backref='property', lazy=True)
+        messages = db.relationship('Message', backref='property', lazy=True)
 
 
-* Authentication Endpoints
+### Photo Model
 
-* Register
-POST /api/register
-
-Request:
-{
-    "username": "example",
-    "email": "example@example.com",
-    "password": "password123"
-}
-
-* Login
-POST /api/login
-
-Request:
-{
-    "email": "example@example.com",
-    "password": "password123"
-}
+    class Photo(db.Model):
+        id = db.Column(db.Integer, primary_key=True)
+        url = db.Column(db.String(200), nullable=False)
+        property_id = db.Column(db.Integer, db.ForeignKey('property.id'), nullable=False)
 
 
-* Authors
+### Message Model
+    from datetime import datetime
+
+    class Message(db.Model):
+        id = db.Column(db.Integer, primary_key=True)
+        sender_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+        receiver_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+        property_id = db.Column(db.Integer, db.ForeignKey('property.id'), nullable=False)
+        content = db.Column(db.Text, nullable=False)
+        timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
+
+## Authentication Endpoints
+    * Register
+    POST /api/register
+
+    Request:
+    {
+        "username": "example",
+        "email": "example@example.com",
+        "password": "password123"
+    }
+
+    * Login
+            POST /api/login
+
+            Request:
+            {
+                "email": "example@example.com",
+                "password": "password123"
+            }
+
+
+## Authors
 - George
 - Godswill
-- Jackson
+- Jackson (github.com/jackmarley254)
 - Janefrancis
