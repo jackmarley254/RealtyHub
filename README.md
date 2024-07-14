@@ -104,5 +104,5 @@ class User(db.Model):
 ## Authors
 - George
 - Godswill
-- Jackson [github.com/jackmarley254]
+- Jackson [https://github.com/jackmarley254]
 - Janefrancis
