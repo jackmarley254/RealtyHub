@@ -115,6 +115,9 @@ class Property(Base):
     available_from = Column(DateTime, nullable=False, default=func.current_timestamp())
     created_at = Column(DateTime, default=datetime.utcnow)
     owner_id = Column(Integer, ForeignKey('owners.id'))
+    image1 = Column(String(20), nullable=True)
+    image2 = Column(String(20), nullable=True)
+    image3 = Column(String(20), nullable=True)
     
     def __repr__(self):
         return f"Property('{self.title}', '{self.description}', '{self.location}', '{self.price}', '{self.property_type}', '{self.property_status}', '{self.bathrooms}', '{self.bedrooms}', '{self.size}')"    
