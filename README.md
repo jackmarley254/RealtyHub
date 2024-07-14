@@ -104,5 +104,5 @@ class User(db.Model):
 ## Authors
 - George Nwabia [https://github.com/Georgen21]
 - Godswill Chimnonso [https://github.com/Tnkma]
-- Jackson [https://github.com/jackmarley254]
+- Jackson Ndiritu [https://github.com/jackmarley254]
 - Janefrancis [https://github.com/Janecanal]
