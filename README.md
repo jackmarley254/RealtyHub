@@ -58,17 +58,18 @@ class User(db.Model):
         status = db.Column(db.String(50), default='available')
         photos = db.relationship('Photo', backref='property', lazy=True)
         messages = db.relationship('Message', backref='property', lazy=True)
-
+```
 
 ### Photo Model
-
+```python
     class Photo(db.Model):
         id = db.Column(db.Integer, primary_key=True)
         url = db.Column(db.String(200), nullable=False)
         property_id = db.Column(db.Integer, db.ForeignKey('property.id'), nullable=False)
-
+```
 
 ### Message Model
+```python
     from datetime import datetime
 
     class Message(db.Model):
@@ -78,9 +79,10 @@ class User(db.Model):
         property_id = db.Column(db.Integer, db.ForeignKey('property.id'), nullable=False)
         content = db.Column(db.Text, nullable=False)
         timestamp = db.Column(db.DateTime, default=datetime.utcnow)
-
+```
 
 ## Authentication Endpoints
+```python   
     * Register
     POST /api/register
 
