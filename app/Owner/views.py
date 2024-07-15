@@ -5,12 +5,12 @@ import secrets
 from PIL import Image
 from flask import render_template, url_for, flash, redirect, request, Blueprint, abort, current_app
 from app import app, db, bcrypt
-from app.models import Messages, Property, Owner
+from app.models import Messages, Property, Owner, Messages, Tenant
 from .forms import RegisterForm, LoginForm, UpdateAccountForm
 from flask_login import login_user, current_user, logout_user, login_required
 
 # Declare the blueprints
-owner = Blueprint('owner', __name__, url_prefix="/investor", template_folder='templates', static_folder='static')
+owner = Blueprint('owner', __name__, url_prefix="/owner", template_folder='templates', static_folder='static')
 
 
 
@@ -96,6 +96,26 @@ def account():
     
     return render_template('update.html', title='Account', image_file=image_file, form=form)
 
+
+@owner.route("/dashboard", methods=['GET'])
+@login_required
+def dashboard():
+    """ routes to the dasboard
+
+    Returns:
+        _type_: _description_
+    """
+    if not current_user.is_authenticated or not isinstance(current_user, Owner):
+        flash('You do not have permission to view this page', 'danger')
+        return redirect(url_for('main.home'))
+    # Retrieve relevant data for the owner
+    properties = Property.query.filter_by(owner_id=current_user.id).all()
+    messages = Messages.query.filter_by(receiver_id=current_user.id).all()
+    tenants = Tenant.query.filter(Property.owner_id==current_user.id).all()
+    return render_template('on_dasboard.html', properties=properties, messages=messages, tenants=tenants)
+
+
+
 @owner.route('/properties', methods=['GET'])
 def view_properties():
     properties = Property.query.all()
@@ -104,8 +124,8 @@ def view_properties():
 
 @owner.route('/property/<int:property_id>', methods=['GET'])
 def view_property(property_id):
-    property = Property.query.get_or_404(property_id)
-    return render_template('view_property.html', property=property)
+    propertys = Property.query.get_or_404(property_id)
+    return render_template('view_property.html', property=propertys)
 
 
 @owner.route('/owner/property/<int:property_id>/edit', methods=['GET', 'POST'])
@@ -145,3 +165,10 @@ def delete_property(property_id):
     db.session.commit()
     flash('Your property has been deleted!', 'success')
     return redirect(url_for('owner.view_properties'))
+
+
+@owner.route('/messages', methods=['GET', 'POST'], strict_slashes=False)
+@login_required
+def messages():
+    messages = Messages.query.filter_by(receiver_id=current_user.id).all()
+    return render_template('#messages.html', messages=messages)

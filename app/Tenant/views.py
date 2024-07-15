@@ -5,7 +5,7 @@ import secrets
 from PIL import Image
 from flask import render_template, url_for, flash, redirect, request, Blueprint, current_app
 from app import app, db, bcrypt
-from app.models import Tenant, Property, Owner, TenantProperty, PropertyStatus
+from app.models import Tenant, Property, Owner, TenantProperty, PropertyStatus, Rental, Messages
 from .forms import RegisterForm, LoginForm, UpdateAccountForm
 from flask_login import login_user, current_user, logout_user, login_required, AnonymousUserMixin
 
@@ -50,14 +50,6 @@ def login():
         else:
             flash('Login Unsuccessful. Please check email and password', 'danger')
     return render_template('login.html', title='Login', form=form)
-
-
-@tenant.route('/dashboard')
-@login_required
-def dashboard():
-    """Dashboard endpoint for tenants."""
-    properties = Property.query.filter_by(owner_id=current_user.id).all()
-    return render_template('dashboard.html', title='Dashboard', properties=properties)
 
 
 def save_picture(form_picture):
@@ -136,3 +128,19 @@ def apply_property(property_id):
     db.session.commit()
     flash('Application successful!', 'success')
     return redirect(url_for("#dashboard"))
+
+@tenant.route("/dashboard", methods=['GET'], strict_slashes=False)
+@login_required
+def dashboard():
+    """Endpoint for the tenant dashboard
+
+    Returns:
+        _type_: _description_
+    """
+    if isinstance(current_user, Owner) or isinstance(current_user, AnonymousUserMixin):
+        flash('You are not authorized to view this page', 'danger')
+        return redirect(url_for('main.home'))
+    # Retrieve relevant data for the tenant
+    rented_properties = Property.query.join(Rental, Rental.property_id == Property.id).filter(Rental.tenant_id == current_user.id).all()
+    messages = Messages.query.filter_by(receiver_id=current_user.id).all()
+    return render_template('dashboard.html', rented_properties=rented_properties, messages=messages)
