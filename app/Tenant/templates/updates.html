@@ -1,12 +1,12 @@
 {% extends "layout.html" %}
 {% block content %}
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='updates.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='update.css') }}">
 
 <div class="container">
     <h2 class="mt-4">Account</h2>
     <div class="row">
         <div class="col-md-4">
-            <img src="{{ image_file }}" alt="Profile Picture" class="rounded mx-auto d-block">
+            <img src="{{ image_file }}" alt="Profile Picture" class="img-thumbnail rounded-circle">
         </div>
         <div class="col-md-8">
             <form method="POST" enctype="multipart/form-data">

@@ -1,8 +1,10 @@
 #!/usr/bin/python3
 """ Forms for the application """
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, FileField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
+from flask_login import current_user
+from flask_wtf.file import FileAllowed
 from app.models import Tenant
 
 
@@ -58,13 +60,29 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Login')
 
 
-class UpdateUserAccount(FlaskForm):
-    """ The update user account form
+class UpdateAccountForm(FlaskForm):
+    """ Update account form
 
     Args:
-        FlaskForm (_type_): Update user account form to validate the user
+        FlaskForm (_type_): _description_
+
+    Raises:
+        ValidationError: _description_
+        ValidationError: _description_
     """
     username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
-    phone = StringField('Phone', validators=[DataRequired(), Length(min=10, max=15)])
-    profile_image = StringField('Profile Image')
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    picture = FileField('Update Profile Picture', validators=[FileAllowed(['jpg', 'png'])])
     submit = SubmitField('Update')
+
+    def validate_username(self, username):
+        if username.data != current_user.username:
+            user = Tenant.query.filter_by(username=username.data).first()
+            if user:
+                raise ValidationError('That username is taken. Please choose a different one.')
+
+    def validate_email(self, email):
+        if email.data != current_user.email:
+            user = Tenant.query.filter_by(email=email.data).first()
+            if user:
+                raise ValidationError('That email is taken. Please choose a different one.')

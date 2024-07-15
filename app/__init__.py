@@ -51,8 +51,10 @@ def load_user(user_id):
         _type_: The user id
     """
     x = Owner.query.get(str(user_id))
+    print(x)
     if x == None:
         x = Tenant.query.get(str(user_id))
+        print(x)
         
     return x
 

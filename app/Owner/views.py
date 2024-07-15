@@ -1,17 +1,17 @@
 #!/usr/bin/python3
 """ The views for the application """
-from flask import render_template, url_for, flash, redirect, request, Blueprint, abort
+import os
+import secrets
+from PIL import Image
+from flask import render_template, url_for, flash, redirect, request, Blueprint, abort, current_app
 from app import app, db, bcrypt
 from app.models import Messages, Property, Owner
-from .forms import RegisterForm, LoginForm
+from .forms import RegisterForm, LoginForm, UpdateAccountForm
 from flask_login import login_user, current_user, logout_user, login_required
 
 # Declare the blueprints
 owner = Blueprint('owner', __name__, url_prefix="/investor", template_folder='templates', static_folder='static')
 
-@owner.route('/', methods=['GET', 'POST'], strict_slashes=False)
-def owner_home():
-    return render_template('layout.html')
 
 
 # Write the endpoints for owners
@@ -56,42 +56,45 @@ def login():
     return render_template('logins.html', title='Login', form=form)
 
 
-@owner.route('/new', methods=['GET', 'POST'])
+def save_picture(form_picture):
+    # Generate a random hex to prevent filename collisions
+    random_hex = secrets.token_hex(8)
+    _, f_ext = os.path.splitext(form_picture.filename)
+    picture_fn = random_hex + f_ext
+    picture_path = os.path.join(current_app.root_path, '/Owner/static/profile_pics', picture_fn)
+    
+    # Ensure the directory exists
+    os.makedirs(os.path.dirname(picture_path), exist_ok=True)
+    
+    # Resize the image before saving
+    output_size = (200, 200)
+    i = Image.open(form_picture)
+    i.thumbnail(output_size)
+    
+    # Save the picture
+    i.save(picture_path)
+    
+    return picture_fn
+
+@owner.route("/account", methods=['GET', 'POST'], strict_slashes=False)
 @login_required
-def new_property():
-    if request.method == 'POST':
-        title = request.form['title']
-        description = request.form['description']
-        price = request.form['price']
-        location = request.form['location']
-        property_type = request.form['property_type']
-        bedrooms = request.form['bedrooms']
-        bathrooms = request.form['bathrooms']
-        size = request.form['size']
-        # amenities = request.form['amenities']
-        available_from = request.form['available_from']
-
-        new_property = Property(
-            title=title,
-            description=description,
-            price=price,
-            location=location,
-            property_type=property_type,
-            bedrooms=bedrooms,
-            bathrooms=bathrooms,
-            size=size,
-            # amenities=amenities,
-            available_from=available_from,
-            owner_id=current_user.id
-        )
-
-        db.session.add(new_property)
+def account():
+    form = UpdateAccountForm()
+    if form.validate_on_submit():
+        if form.picture.data:
+            picture_file = save_picture(form.picture.data)
+            current_user.image_file = picture_file
+        current_user.username = form.username.data
+        current_user.email = form.email.data
         db.session.commit()
-        flash('Your property has been created!', 'success')
-        return redirect(url_for('owner.view_properties'))
-
-    return render_template('create_property.html', title='New Property')
-
+        flash('Your account has been updated!', 'success')
+        return redirect(url_for('owner.account'))
+    elif request.method == 'GET':
+        form.username.data = current_user.username
+        form.email.data = current_user.email
+    image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
+    
+    return render_template('update.html', title='Account', image_file=image_file, form=form)
 
 @owner.route('/properties', methods=['GET'])
 def view_properties():
