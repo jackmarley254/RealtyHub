@@ -25,7 +25,7 @@ login_manager = LoginManager(app)
 login_manager.init_app(app)
 login_manager.blueprint_login_views = {
     'tenant': 'tenant.login',
-    'owner': 'investor.login'
+    'owner': 'owner.login'
 }
 login_manager.session_protection = "strong"
 

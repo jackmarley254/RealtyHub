@@ -30,6 +30,7 @@ class Users(Base, UserMixin):
     image_file = Column(String(128), nullable=False, default='default.jpg')
     location = Column(String(128), nullable=False)
     
+    
     def __repr__(self):
         """returning the string reper of our User class"""
         return f"User('{self.username}', '{self.email}', '{self.image_file}', '{self.phone}' )"
@@ -130,15 +131,21 @@ class Property(Base):
     available_from = Column(DateTime, nullable=False, default=func.current_timestamp())
     created_at = Column(DateTime, default=datetime.utcnow)
     owner_id = Column(Integer, ForeignKey('owners.id'))
+    rental = relationship('Rental', backref='properties', lazy=True)
     image1 = Column(String(20), nullable=True)
     image2 = Column(String(20), nullable=True)
     image3 = Column(String(20), nullable=True)
     
     def __repr__(self):
         return f"Property('{self.title}', '{self.description}', '{self.location}', '{self.price}', '{self.property_type}', '{self.property_status}', '{self.bathrooms}', '{self.bedrooms}', '{self.size}')"    
+
+
+class Rental(Base):
+    id = Column(Integer, primary_key=True)
+    property_id = Column(Integer, ForeignKey('properties.id'), nullable=False)
+    tenant_id = Column(Integer, ForeignKey('tenants.id'), nullable=False)
+    contract_end_date = Column(Date, nullable=False)
     
-    
-   
 class Messages(Base, UserMixin):
     """Message model
 
@@ -147,11 +154,14 @@ class Messages(Base, UserMixin):
     """
     __tablename__ = 'messages'
     id = Column(Integer, primary_key=True)
-    # sender_id = Column(Integer, ForeignKey('users.id'))
-    # receiver_id = Column(Integer, ForeignKey('users.id'))
-    property_id = Column(Integer, ForeignKey('properties.id'))
+    sender_id = Column(Integer, ForeignKey('users.id'))
+    receiver_id = Column(Integer, ForeignKey('users.id'))
     message = Column(Text, nullable=False)
     timestamp = Column(DateTime, default=datetime.utcnow)
+    sender = relationship('Users', foreign_keys=[sender_id])
+    receiver = relationship('Users', foreign_keys=[receiver_id])
+        
+    
     
     def __repr__(self):
         return f"Messages('{self.sender_id}', '{self.receiver_id}', '{self.property_id}', '{self.message}')"

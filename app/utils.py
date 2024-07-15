@@ -11,9 +11,7 @@ main = Blueprint('main', __name__, url_prefix="/home", template_folder='template
 @main.route('/', methods=['GET', 'POST'], strict_slashes=False)
 def home():
     """ homepage """
-    prop = Property.query.order_by(Property.created_at.desc()).all() 
-    # owner = Tenant.query.filter_by(id=current_user.id).first()
-    return render_template('home.html', property=prop)
+    return render_template('home.html')
 
 @main.route('/logout')
 @login_required

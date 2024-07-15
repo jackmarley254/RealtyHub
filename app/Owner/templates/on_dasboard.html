@@ -8,18 +8,18 @@
             <div class="position-sticky">
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{{ url_for('tenant.dashboard') }}">
+                        <a class="nav-link active" aria-current="page" href="{{ url_for('owner.dashboard') }}">
                             Dashboard
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('tenant.messages') }}">
+                        <a class="nav-link" href="{{ url_for('owner.messages') }}">
                             Messages
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('tenant.properties') }}">
-                            Rented Properties
+                        <a class="nav-link" href="{{ url_for('owner.view_properties') }}">
+                            Properties
                         </a>
                     </li>
                 </ul>
@@ -55,24 +55,51 @@
                 </table>
             </div>
 
-            <h2>Rented Properties</h2>
+            <h2>Properties</h2>
             <div class="table-responsive">
                 <table class="table table-striped table-sm">
                     <thead>
                         <tr>
                             <th>#</th>
                             <th>Property</th>
-                            <th>Owner</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for property in properties %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ property.title }}</td>
+                            <td>{{ property.status }}</td>
+                            <td>
+                                <a href="{{ url_for('property.view', property_id=property.id) }}">View</a>
+                                <a href="{{ url_for('property.edit', property_id=property.id) }}">Edit</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <h2>Tenants</h2>
+            <div class="table-responsive">
+                <table class="table table-striped table-sm">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Tenant</th>
+                            <th>Property</th>
                             <th>Contract End</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for property in rented_properties %}
+                        {% for tenant in tenants %}
                         <tr>
                             <td>{{ loop.index }}</td>
-                            <td>{{ property.title }}</td>
-                            <td>{{ property.owner.username }}</td>
-                            <td>{{ property.rental.contract_end_date.strftime('%Y-%m-%d') }}</td>
+                            <td>{{ tenant.username }}</td>
+                            <td>{{ tenant.property.title }}</td>
+                            <td>{{ tenant.contract_end_date.strftime('%Y-%m-%d') }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
