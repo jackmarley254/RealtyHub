@@ -1,60 +1,75 @@
 #!/usr/bin/python3
 """ The base class for all models in the application """
 from datetime import datetime
-from sqlalchemy import Column, Integer, DateTime, ForeignKey, String,Text, Date, func, Boolean
+from sqlalchemy import Column, Integer, DateTime, ForeignKey, String,Text, Date, func, Boolean, MetaData
 from sqlalchemy.types import JSON
 from sqlalchemy.orm import relationship, Mapped
 from app import Base
 from enum import Enum
 from flask_login import UserMixin
 
+metadata = MetaData()
 
-class Owner(Base, UserMixin):
+
+class Users(Base, UserMixin):
+    """ User Model that both Owner and Tenant can inherit from
+
+    Args:
+        Base (_type_): _description_
+        UserMixin (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
+    __tablename__ = 'users'
+    id = Column(Integer, primary_key=True)
+    username = Column(String(128), nullable=False)
+    password = Column(String(128), nullable=False)
+    email = Column(String(128), nullable=False)
+    phone = Column(String(128), nullable=False)
+    image_file = Column(String(128), nullable=False, default='default.jpg')
+    location = Column(String(128), nullable=False)
+    
+    def __repr__(self):
+        """returning the string reper of our User class"""
+        return f"User('{self.username}', '{self.email}', '{self.image_file}', '{self.phone}' )"
+    
+    def get_id(self):
+        """Get the user id"""
+        return self.id
+
+class Owner(Users):
     """ The user model
 
     Args:
         Base (_type_): Onwers models
     """
     __tablename__ = 'owners'
-    id = Column(Integer, primary_key=True)
-    username = Column(String(128), nullable=False)
-    password = Column(String(128), nullable=False)
-    email = Column(String(128), nullable=False)
-    phone = Column(String(128), nullable=False)
-    image_file = Column(String(128), nullable=False, default='default.jpg')
-    location = Column(String(128), nullable=False)
+    id = Column(Integer, ForeignKey('users.id'), primary_key=True)
     property_id = relationship('Property', backref='owners', lazy=True)
+    
+    def __init_(self, username, password, email, phone, image_file,location):
+        super().__init__(username=username, password=password, email=email, phone=phone, image_file=image_file, location=location)
+    
+    
     def __repr__(self):
-        return f"User('{self.username}', '{self.email}', '{self.image_file}', '{self.location}', '{self.phone}')"
-
-
-    def get_id(self):
-        """ Get the user id"""
-        return self.id
+        return f"Owner('{self.username}', '{self.email}', '{self.image_file}', '{self.location}', '{self.phone}')"
 
     
-class Tenant(Base, UserMixin):
+class Tenant(Users):
     """ The tenant model
 
     Args:
         Base (_type_): Having a separate table so we can allow tenants to have their own account
     """
     __tablename__ = 'tenants'
-    id = Column(Integer, primary_key=True)
-    username = Column(String(128), nullable=False)
-    password = Column(String(128), nullable=False)
-    email = Column(String(128), nullable=False)
-    phone = Column(String(128), nullable=False)
-    image_file = Column(String(128), nullable=False, default='default.jpg')
-    location = Column(String(128), nullable=False)
+    id = Column(Integer, ForeignKey('users.id'), primary_key=True)
+    
+    def __init_(self, username, password, email, phone, image_file,location):
+        super().__init__(username=username, password=password, email=email, phone=phone, image_file=image_file, location=location)
     
     def __repr__(self):
-        return f"Tenant('{self.username}', '{self.email}', '{self.image_file}', '{self.location}', '{self.phone}')"
-    
-    def get_id(self):
-        """ Get the tenant id"""
-        return self.id
-
+        return f"Tenant('{self.username}', '{self.email}', '{self.image_file}', '{self.location}', '{self.phone}')" 
 
 class TenantProperty(Base):
     """ The tenant property model
