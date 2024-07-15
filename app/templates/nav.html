@@ -1,0 +1,230 @@
+<style>
+   
+    /* Global styles */
+    body {
+        font-family: 'Roboto', sans-serif; /* Example font */
+        line-height: 1.6;
+        background-color: #f8f9fa; /* Example background color */
+      }
+      
+      /* Navbar */
+    .navbar {
+        background-color: #086788;
+        
+      }
+      
+      .navbar-brand {
+        color: #ffffff;
+        font-size: 1.5rem;
+      }
+      
+      .navbar-nav .nav-link {
+        color: #ffffff;
+        text-transform: uppercase;
+        font-size: 1.1rem;
+       
+      }
+      
+      .navbar-nav .nav-link:hover {
+        opacity: 0.8;
+      }
+      
+      .dropdown-menu {
+        background-color: rgba(8, 103, 136, 0.9);
+        border: none;
+      }
+      
+      .dropdown-item {
+        color: #ffffff;
+        font-size: 1rem;
+      }
+      
+      .dropdown-item:hover {
+        background-color: #ffffff;
+        color: #086788;
+      }
+      
+      .spacing {
+        margin-right: 80px;
+      }
+     /* Hero Section */
+    .hero {
+        background: url(../static/home/photo_realestate.jpg) center/cover no-repeat;
+        height: 70vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        color: #ffffff;
+        overflow: hidden;
+      }
+      
+      .hero-heading {
+        font-size: 4rem;
+        font-weight: bold;
+        margin-bottom: 20px;
+      }
+      
+      .hero p {
+        font-size: 1.2rem;
+        max-width: 600px; /* Limit text width for readability */
+        margin: 0 auto 40px;
+      }
+      
+      .icon-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        text-decoration: none;
+        color: #ffffff;
+        border: 2px solid #ffffff;
+        padding: 10px 20px;
+        margin: 10px;
+        transition: all 0.3s ease;
+      }
+      
+      .icon-container:hover {
+        background-color: #ffffff;
+        color: #086788;
+      }
+      
+      .icon-container i {
+        font-size: 2rem;
+        margin-bottom: 10px;
+      }
+      
+      .icon-container span {
+        font-size: 1rem;
+        text-align: center;
+      }
+      
+      /* Welcome section */
+      #welcome-section {
+        background-color: #ffffff;
+        color: #07a0c3;
+      }
+      
+      /* Services section */
+      #services-section {
+        background-color: #f8f9fa;
+        padding: 80px 0;
+      }
+      
+      #services-section h2 {
+        font-size: 2.5rem;
+        margin-bottom: 40px;
+      }
+      
+      #services-section p {
+        font-size: 1.2rem;
+        max-width: 800px;
+        margin: 0 auto 30px;
+      }
+      
+      /* Featured properties section */
+      #featured-properties {
+        background-color: #ffffff;
+        padding: 80px 0;
+      }
+      
+      #featured-properties h2 {
+        font-size: 2.5rem;
+        margin-bottom: 40px;
+      }
+      
+      .card {
+        transition: all 0.3s ease;
+        border: none;
+      }
+      
+      .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      }
+      
+    /* Footer section */
+    footer {
+        padding: 10px 0;
+        position: relative;
+      }
+      
+      footer.bg-dark {
+        color: #ffffff;
+      }
+      
+      footer.bg-dark a {
+        color: #ffffff;
+        transition: color 0.3s ease; /* Smooth color transition */
+      }
+      
+      footer.bg-dark a:hover {
+        color: #f8f9fa; /* Lighter text on hover */
+      }
+    
+      
+      /* Responsive adjustments */
+      @media (max-width: 992px) {
+        .hero {
+          height: 500px; /* Adjust height for smaller screens */
+        }
+      
+        .hero-heading {
+          font-size: 2.5rem;
+        }
+        #welcome-section {
+          text-align: center;
+        }
+        
+        .fa-2x {
+          font-size: 1.5rem;
+        }
+      }
+      
+      @media (max-width: 768px) {
+        .hero-heading {
+          font-size: 2rem;
+        }
+        
+        .hero p {
+          font-size: 1rem;
+          max-width: 600px; /* Limit text width for readability */
+          margin: 0 auto 40px;
+        }
+        
+        .icon-container {
+          padding: 5px 5px;
+          margin: 0px;
+        }
+        
+        .icon-container:hover {
+          background-color: #ffffff;
+          color: #086788;
+        }
+        
+        .icon-container i {
+          font-size: 1rem;
+          margin-bottom: 0px;
+        }
+        
+        .icon-container span {
+          font-size: 1rem;
+          text-align: center;
+        }
+        
+      
+        .navbar-brand {
+          font-size: 1.5rem; /* Adjust navbar brand size */
+        }
+        
+        #welcome-section {
+          text-align: center;
+        }
+    
+       
+        .fa-2x {
+          font-size: 1.5rem;
+        }
+      }
+      
+    </style>
