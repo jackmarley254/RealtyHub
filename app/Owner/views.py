@@ -34,7 +34,7 @@ def register():
         db.session.commit()
         flash('Your account has been created! You can now log in', 'success')
         return redirect(url_for('owner.login'))
-    return render_template('register.html', title='Register', form=form)
+    return render_template('registers.html', title='Register', form=form)
 
 
 @owner.route('/login', methods=['GET', 'POST'], strict_slashes=False)
@@ -53,7 +53,7 @@ def login():
         else:
             
             flash('Login unsuccesful. Please check email and password', 'danger')
-    return render_template('login.html', title='Login', form=form)
+    return render_template('logins.html', title='Login', form=form)
 
 
 @owner.route('/new', methods=['GET', 'POST'])
