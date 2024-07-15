@@ -12,7 +12,7 @@ main = Blueprint('main', __name__, url_prefix="/home", template_folder='template
 @main.route('/', methods=['GET', 'POST'], strict_slashes=False)
 def home():
     """ homepage """
-    return render_template('layout.html')
+    return render_template('home.html')
 
 @main.route('/logout')
 @login_required
