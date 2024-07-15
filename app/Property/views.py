@@ -1,17 +1,38 @@
 #!/usr/bin/python3
 """ The views for the application """
-from flask import render_template, url_for, flash, redirect, request, Blueprint, abort
+import os
+from werkzeug.utils import secure_filename
+import secrets
+from flask import render_template, url_for, flash, redirect, request, Blueprint, abort, current_app
 from app import app, db
 from datetime import datetime
+from PIL import Image
 from app.models import Owner, Property, Tenant, PropertyStatus, TenantProperty
-from .forms import PropertyForm, UpdatePropertyForm
+from .forms import PropertyForm, UpdatePropertyForm, SearchForm
 from flask_login import current_user, login_required, AnonymousUserMixin
 
 # Declare the blueprints
 proprety = Blueprint('proprety', __name__, url_prefix="/property", template_folder='templates', static_folder='static')
 
 
-# Write the endpoints for properties
+
+def save_picture(form_picture):
+    random_hex = secrets.token_hex(8)
+    _, f_ext = os.path.splitext(form_picture.filename)
+    picture_fn = random_hex + f_ext
+    picture_path = os.path.join(current_app.root_path, 'static/property_pics', picture_fn)
+
+    # Ensure the directory exists
+    os.makedirs(os.path.dirname(picture_path), exist_ok=True)
+
+    # Save the picture
+    output_size = (125, 125)
+    i = Image.open(form_picture)
+    i.thumbnail(output_size)
+    i.save(picture_path)
+
+    return picture_fn
+
 @proprety.route('/add_new', methods=['GET', 'POST'], strict_slashes=False)
 @login_required
 def create_property():
@@ -36,13 +57,22 @@ def create_property():
             price=int(form.price.data),
             location=form.location.data,
             property_type=form.property_type.data,
+            property_status=form.property_status.data,
             bedrooms=int(form.bedrooms.data),
             bathrooms=int(form.bathrooms.data),
             size=int(form.size.data),
             # amenities=form.amenities.data,
-            available_from = datetime.strptime(form.available_from.data, '%Y-%m-%d'),
+            available_from=datetime.strptime(str(form.available_from.data), '%Y-%m-%d'),
             owner_id=current_user.id
         )
+
+        # Handle image uploads
+        if form.image1.data:
+            new_property.image1 = save_picture(form.image1.data)
+        if form.image2.data:
+            new_property.image2 = save_picture(form.image2.data)
+        if form.image3.data:
+            new_property.image3 = save_picture(form.image3.data)
 
         try:
             db.session.add(new_property)
@@ -55,10 +85,8 @@ def create_property():
     
     return render_template('create_property.html', form=form)
 
-    
 
-
-@proprety.route('/property/<int:property_id>/update', methods=['GET', 'POST'], strict_slashes=False)
+@proprety.route('/<int:property_id>/update', methods=['GET', 'POST'], strict_slashes=False)
 @login_required
 def update_property(property_id):
     """ Allows the owner to update a property """
@@ -96,7 +124,7 @@ def update_property(property_id):
 
     return render_template('#update_property.html', form=form)
 
-@proprety.route('/property/<int:property_id>/delete', methods=['GET', 'POST'])
+@proprety.route('properties/<int:property_id>/delete', methods=['GET', 'POST'])
 @login_required
 def delete_property(property_id):
     """ Allows the owner to delete a property """
@@ -110,85 +138,83 @@ def delete_property(property_id):
     flash('Property deleted successfully', 'success')
 
 
-@proprety.route('/property/<int:property_id>/view', methods=['GET', 'POST'], strict_slashes=False)
+@proprety.route('properties/<int:property_id>/view', methods=['GET'])
 def view_property(property_id):
     """ Allows the tenant to view a property """
     prop = Property.query.get_or_404(property_id)
-    render_template('#view_property.html', title=prop.title, property=prop)
-    # return jsonify({'property': property}), 200
+    return render_template('show_property.html', title=prop.title, property=prop)
+
     
 
 @proprety.route('/search', methods=['GET', 'POST'], strict_slashes=False)
-# @login_required
 def search_properties():
-    # Search for properties
-    # Seems we will allow any user to search for properties but hold them when they want to appy for the property
-    location = request.args.get('location')
-    min_price = request.args.get('min_price')
-    max_price = request.args.get('max_price')
-    property_type = request.args.get('property_type')
-    property_status = request.args.get('property_status')  # sale or rent
-    min_bedrooms = request.args.get('min_bedrooms')
-    min_bathrooms = request.args.get('min_bathrooms')
-    limit = int(request.args.get('limit', 10))
-    offset = int(request.args.get('offset', 0))
+    form = SearchForm()
+    properties_list = []
+    if form.validate_on_submit():
+        location = form.location.data
+        min_price = form.min_price.data
+        max_price = form.max_price.data
+        property_type = form.property_type.data
+        property_status = form.property_status.data
+        min_bedrooms = form.min_bedrooms.data
+        min_bathrooms = form.min_bathrooms.data
+        limit = 10
+        offset = 0
 
-    query = Property.query
+        query = Property.query
 
-    if location:
-        query = query.filter(Property.location == location)
-    if min_price:
-        query = query.filter(Property.price >= min_price)
-    if max_price:
-        query = query.filter(Property.price <= max_price)
-    if property_type:
-        query = query.filter(Property.property_type == property_type)
-    if property_status:
-        query = query.filter(Property.property_status == property_status)
-    if min_bedrooms:
-        query = query.filter(Property.bedrooms >= min_bedrooms)
-    if min_bathrooms:
-        query = query.filter(Property.bathrooms >= min_bathrooms)
+        if location:
+            query = query.filter(Property.location == location)
+        if min_price is not None:
+            query = query.filter(Property.price >= min_price)
+        if max_price is not None:
+            query = query.filter(Property.price <= max_price)
+        if property_type:
+            query = query.filter(Property.property_type == property_type)
+        if property_status:
+            query = query.filter(Property.property_status == property_status)
+        if min_bedrooms is not None:
+            query = query.filter(Property.bedrooms >= min_bedrooms)
+        if min_bathrooms is not None:
+            query = query.filter(Property.bathrooms >= min_bathrooms)
 
-    properties = query.limit(limit).offset(offset).all()
-    properties_list = [
-        {
-            'id': property.id,
-            'title': property.title,
-            'description': property.description,
-            'price': property.price,
-            'location': property.location,
-            'property_type': property.property_type,
-            'property_status': property.property_status,
-            'bedrooms': property.bedrooms,
-            'bathrooms': property.bathrooms,
-            'size': property.size,
-            'amenities': property.amenities,
-            'available_from': property.available_from,
-            'owner_id': property.owner_id,
-            'created_at': property.created_at,
-            'updated_at': property.updated_at
-        }
-        for property in properties
-    ]
-    # return jsonify(properties_list), 200
-    render_template('#search_properties.html', properties=properties_list, limit=limit, offset=offset)
+        properties = query.limit(limit).offset(offset).all()
+        properties_list = [
+            {
+                'id': property.id,
+                'title': property.title,
+                'description': property.description,
+                'price': property.price,
+                'location': property.location,
+                'property_type': property.property_type,
+                'property_status': property.property_status,
+                'bedrooms': property.bedrooms,
+                'bathrooms': property.bathrooms,
+                'size': property.size,
+                'amenities': property.amenities,
+                'available_from': property.available_from,
+                'owner_id': property.owner_id,
+                'created_at': property.created_at,
+                'updated_at': property.updated_at
+            }
+            for property in properties
+        ]
 
+    return render_template('search.html', form=form, properties=properties_list)
+ 
 
 @proprety.route('/properties', methods=['GET'], strict_slashes=False)
 @login_required
 def get_properties():
     """ Get all properties """
-    # Shows peoperty in batches on page
-    limit = request.args.get('limit', default=10, type=int)
-    offset = request.args.get('offset', default=0, type=int)
+    # Pagination settings
+    page = request.args.get('page', 1, type=int)
+    per_page = 9  # 3 columns * 3 rows
 
-    properties = Property.query.offset(offset).limit(limit).all()
-    total_properties = Property.query.count()
+    properties = Property.query.paginate(page=page, per_page=per_page)
+    
+    return render_template('view_property.html', properties=properties.items, pagination=properties)
 
-    return render_template('properties.html', properties=properties, total=total_properties, limit=limit, offset=offset)
-
-@proprety.route('/dashboard', methods=['GET'], strict_slashes=False)
 @login_required
 def view_created_property():
     """ Allows the owner view created properties """
@@ -202,39 +228,3 @@ def view_created_property():
     user_properties = Property.query.filter_by(owner_id=user.id).all()
     
     return render_template('dashboard.html', user=user, properties=user_properties)
-
-@proprety.route('/property/<int:property_id>/apply', methods=['GET', 'POST'], strict_slashes=False)
-@login_required
-def apply_property(property_id):
-    """ Allows the tenant to apply for a property """
-     # If the current_user is an Owner
-    if isinstance(current_user, Owner):
-        flash('You cannot apply for a property!', 'danger')
-        return redirect(url_for("#view_property.html"))
-    
-    # check if the user is authenticated
-    if current_user.is_authenticated or isinstance(current_user, AnonymousUserMixin):
-        flash('You have to be logged in before you can apply for a property!', 'warning')
-        return redirect(url_for("#home"))
-
-    prop = Property.query.get_or_404(property_id)
-
-    # Check if the property is already rented or sold
-    if prop.property_status in [PropertyStatus.RENTED]:
-        flash('Property is already Rented out', 'danger')
-        return redirect(url_for("#view_property.html"))
-    if prop.property_status in [PropertyStatus.SOLD]:
-        flash('Property is already Sold out', 'danger')
-        return redirect(url_for("#view_property.html"))
-
-    # Check if the tenant has already applied for the property
-    if prop.tenants.filter_by(id=current_user.id).first():
-        flash('You have already applied for this property', 'warning')
-        return redirect(url_for("#view_property.html"))
-    
-    # Apply for the property
-    tenant_apply = TenantProperty(tenant_id=current_user.id, property_id=prop.id)
-    db.session.add(tenant_apply)
-    db.session.commit()
-    flash('Application successful!', 'success')
-    return redirect(url_for("#dashboard"))
