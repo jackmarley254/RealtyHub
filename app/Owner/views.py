@@ -7,7 +7,7 @@ from flask import render_template, url_for, flash, redirect, request, Blueprint,
 from app import app, db, bcrypt
 from app.models import Messages, Property, Owner, Messages, Tenant
 from .forms import RegisterForm, LoginForm, UpdateAccountForm
-from flask_login import login_user, current_user, logout_user, login_required
+from flask_login import login_user, current_user, logout_user, login_required, AnonymousUserMixin
 
 # Declare the blueprints
 owner = Blueprint('owner', __name__, url_prefix="/owner", template_folder='templates', static_folder='static')
@@ -105,14 +105,14 @@ def dashboard():
     Returns:
         _type_: _description_
     """
-    if not current_user.is_authenticated or not isinstance(current_user, Owner):
+    if not current_user.is_authenticated or isinstance(current_user, AnonymousUserMixin):
         flash('You do not have permission to view this page', 'danger')
         return redirect(url_for('main.home'))
     # Retrieve relevant data for the owner
     properties = Property.query.filter_by(owner_id=current_user.id).all()
     messages = Messages.query.filter_by(receiver_id=current_user.id).all()
-    tenants = Tenant.query.filter(Property.owner_id==current_user.id).all()
-    return render_template('on_dasboard.html', properties=properties, messages=messages, tenants=tenants)
+    # tenants = Tenant.query.filter(Property.owner_id==current_user.id).all()
+    return render_template('on_dasboard.html', properties=properties, messages=messages)
 
 
 

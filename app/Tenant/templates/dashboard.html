@@ -1,84 +1,39 @@
-{% extends "layout.html" %}
-{% block content %}
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard.css') }}">
-
-<div class="container-fluid">
-    <div class="row">
-        <nav id="sidebar" class="col-md-2 d-md-block bg-light sidebar">
-            <div class="position-sticky">
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{{ url_for('tenant.dashboard') }}">
-                            Dashboard
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('tenant.messages') }}">
-                            Messages
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('tenant.properties') }}">
-                            Rented Properties
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-
-        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <h1 class="h2">Dashboard</h1>
-            </div>
-
-            <h2>Messages</h2>
-            <div class="table-responsive">
-                <table class="table table-striped table-sm">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Sender</th>
-                            <th>Message</th>
-                            <th>Date</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for message in messages %}
-                        <tr>
-                            <td>{{ loop.index }}</td>
-                            <td>{{ message.sender.username }}</td>
-                            <td>{{ message.content }}</td>
-                            <td>{{ message.date_posted.strftime('%Y-%m-%d') }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-
-            <h2>Rented Properties</h2>
-            <div class="table-responsive">
-                <table class="table table-striped table-sm">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Property</th>
-                            <th>Owner</th>
-                            <th>Contract End</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for property in rented_properties %}
-                        <tr>
-                            <td>{{ loop.index }}</td>
-                            <td>{{ property.title }}</td>
-                            <td>{{ property.owner.username }}</td>
-                            <td>{{ property.rental.contract_end_date.strftime('%Y-%m-%d') }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </main>
-    </div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" type="text/css" href="{{ url_for('owner.static', filename='dashboard.css') }}">
+</head>
+<body>
+<div class="container">
+<nav>
+    <ul>
+        <li><a href="#" class="logo">
+                <img src="/logo.jpg" alt="logo">
+                <span class="nav-item">DashBoard</span>
+        </a></li>
+        <li><a href="#">
+            <i class="fas fa-home"></i>
+            <span class="nav-item">Home</span>
+        </a></li>
+        <li><a href="#">
+            <i class="fas fa-user"></i>
+            <span class="nav-item">Profile</span>
+        </a></li>
+        <li><a href="#">
+            <i class="fas fa-home"></i>
+            <span class="nav-item">Home</span>
+        </a></li>
+        <li><a href="#">
+            <i class="fas fa-home"></i>
+            <span class="nav-item">Home</span>
+        </a></li>
+        <li><a href="#">
+            <i class="fas fa-home"></i>
+            <span class="nav-item">Home</span>
+        </a></li>
+        <li><a href="#">
+            <i class="fas fa-sign-out-alt"></i>
+            <span class="nav-item">Logout</span>
+        </a></li>
+    </ul>
+</nav>
 </div>
-{% endblock %}
+</body>
