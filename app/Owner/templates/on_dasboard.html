@@ -1,111 +1,84 @@
 {% extends "layout.html" %}
 {% block content %}
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard.css') }}">
-
-<div class="container-fluid">
-    <div class="row">
-        <nav id="sidebar" class="col-md-2 d-md-block bg-light sidebar">
-            <div class="position-sticky">
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{{ url_for('owner.dashboard') }}">
-                            Dashboard
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('owner.messages') }}">
-                            Messages
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('owner.view_properties') }}">
-                            Properties
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-
-        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <h1 class="h2">Dashboard</h1>
-            </div>
-
-            <h2>Messages</h2>
-            <div class="table-responsive">
-                <table class="table table-striped table-sm">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Sender</th>
-                            <th>Message</th>
-                            <th>Date</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for message in messages %}
-                        <tr>
-                            <td>{{ loop.index }}</td>
-                            <td>{{ message.sender.username }}</td>
-                            <td>{{ message.content }}</td>
-                            <td>{{ message.date_posted.strftime('%Y-%m-%d') }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-
-            <h2>Properties</h2>
-            <div class="table-responsive">
-                <table class="table table-striped table-sm">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Property</th>
-                            <th>Status</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for property in properties %}
-                        <tr>
-                            <td>{{ loop.index }}</td>
-                            <td>{{ property.title }}</td>
-                            <td>{{ property.status }}</td>
-                            <td>
-                                <a href="{{ url_for('property.view', property_id=property.id) }}">View</a>
-                                <a href="{{ url_for('property.edit', property_id=property.id) }}">Edit</a>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-
-            <h2>Tenants</h2>
-            <div class="table-responsive">
-                <table class="table table-striped table-sm">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Tenant</th>
-                            <th>Property</th>
-                            <th>Contract End</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for tenant in tenants %}
-                        <tr>
-                            <td>{{ loop.index }}</td>
-                            <td>{{ tenant.username }}</td>
-                            <td>{{ tenant.property.title }}</td>
-                            <td>{{ tenant.contract_end_date.strftime('%Y-%m-%d') }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </main>
+<link rel="stylesheet" type="text/css" href="{{ url_for('owner.static', filename='dashboard.css') }}">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<div class="sidebar" method="POST" action="">
+    <header>DASHBOARD</header>
+        <ul class="sidebar flex-column">
+          <li class="nav-item">
+            <a href="" class="sidebar-link text-white" data-url="{{ url_for('main.home') }}" onclick="event.preventDefault()">
+                <i class="fs-6 fas fa-tachometer-alt"></i>
+                    <span class="fs-4 ms-3 d-none d-sm-inline">home</span>
+            </a>
+          </li>
+          <li class="nav-item mt-2">
+            <a href="{{ url_for('main.home') }}">
+                <i class="fs-5 fas fa-home"></i>
+                    <span class="fs-3 ms-3 d-none d-sm-inline">Home</span>
+            </a>
+          </li>
+          <li class="nav-item py-2 py-sm-0 mask mt-2">
+            <a href="#" class="sidebar-link text-white" data-url="{{ url_for('proprety.create_property') }}" onclick="event.preventDefault()">
+                <i class="fs-5 fas fa-briefcase"></i>
+                    <span class="fs-4 ms-3 d-none d-sm-inline">property</span>
+            </a>
+          </li>
+          <li class="nav-item mt-2">
+            <a href="#" class="sidebar-link text-white" data-url="{{ url_for('main.home') }}"onclick="event.preventDefault()">
+                <i class="fs-6 fas fa-history"></i>
+                    <span class="fs-4 ms-3 d-none d-sm-inline">home</span>
+            </a>
+          </li>
+          <li class="nav-item form-group mt-2">
+            <a href="#" class="sidebar-link text-white" data-url="{{ url_for('main.home') }}" onclick="event.preventDefault()">
+              <i class="fs-6 fas fa-wrench"></i>
+              <span class="fs-4 ms-3 d-none d-sm-inline">home</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+  <!-- conent section -->
+    <div class="sidebar-content" id="sidebar-content">
+       <!-- Content will be dynamically loaded here -->
     </div>
-</div>
+  </div>
+  <!-- end of content section -->
+  <script>
+    $(document).ready(function() {
+        // Function to load sidebar content from local storage
+        function loadSidebarContent() {
+            var content = localStorage.getItem('sidebarContent');
+            if (content) {
+                $("#sidebar-content").html(content);
+            }
+        }
+
+        // Handle click events on sidebar links
+        $(".sidebar-link").click(function(event) {
+            event.preventDefault();  // Prevent default link behavior
+            
+            // Get the URL from the data-url attribute
+            var url = $(this).data('url');
+            
+            // Make an AJAX request to the Flask route
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function(response) {
+                    // Replace the content area with the fetched content
+                    $("#sidebar-content").html(response);
+                    // Save the content to local storage
+                    localStorage.setItem('sidebarContent', response);
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error fetching content:", error);
+                }
+            });
+        });
+
+        // Load sidebar content on initial page load
+        loadSidebarContent();
+    });  
+</script>
+
 {% endblock %}
