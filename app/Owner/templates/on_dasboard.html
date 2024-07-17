@@ -1,39 +1,84 @@
 {% extends "layout.html" %}
 {% block content %}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <link rel="stylesheet" type="text/css" href="{{ url_for('owner.static', filename='dashboard.css') }}">
-<div class="container">
-    <nav class="dashboard">
-        <ul>
-            <li><a href="#" class="logo">
-                    <img src="/logo.jpg" alt="logo">
-                    <span class="nav-item">DashBoard</span>
-            </a></li>
-            <li><a href="#">
-                <i class="fas fa-home"></i>
-                <span class="nav-item">Home</span>
-            </a></li>
-            <li><a href="#">
-                <i class="fas fa-user"></i>
-                <span class="nav-item">Profile</span>
-            </a></li>
-            <li><a href="#">
-                <i class="fas fa-home"></i>
-                <span class="nav-item">Home</span>
-            </a></li>
-            <li><a href="#">
-                <i class="fas fa-home"></i>
-                <span class="nav-item">Home</span>
-            </a></li>
-            <li><a href="#">
-                <i class="fas fa-home"></i>
-                <span class="nav-item">Home</span>
-            </a></li>
-            <li><a href="#" class="logout">
-                <i class="fas fa-sign-out-alt"></i>
-                <span class="nav-item">Logout</span>
-            </a></li>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<div class="sidebar" method="POST" action="">
+    <header>DASHBOARD</header>
+        <ul class="sidebar flex-column">
+          <li class="nav-item">
+            <a href="" class="sidebar-link text-white" data-url="{{ url_for('main.home') }}" onclick="event.preventDefault()">
+                <i class="fs-6 fas fa-tachometer-alt"></i>
+                    <span class="fs-4 ms-3 d-none d-sm-inline">home</span>
+            </a>
+          </li>
+          <li class="nav-item mt-2">
+            <a href="{{ url_for('main.home') }}">
+                <i class="fs-5 fas fa-home"></i>
+                    <span class="fs-3 ms-3 d-none d-sm-inline">Home</span>
+            </a>
+          </li>
+          <li class="nav-item py-2 py-sm-0 mask mt-2">
+            <a href="#" class="sidebar-link text-white" data-url="{{ url_for('proprety.create_property') }}" onclick="event.preventDefault()">
+                <i class="fs-5 fas fa-briefcase"></i>
+                    <span class="fs-4 ms-3 d-none d-sm-inline">property</span>
+            </a>
+          </li>
+          <li class="nav-item mt-2">
+            <a href="#" class="sidebar-link text-white" data-url="{{ url_for('main.home') }}"onclick="event.preventDefault()">
+                <i class="fs-6 fas fa-history"></i>
+                    <span class="fs-4 ms-3 d-none d-sm-inline">home</span>
+            </a>
+          </li>
+          <li class="nav-item form-group mt-2">
+            <a href="#" class="sidebar-link text-white" data-url="{{ url_for('main.home') }}" onclick="event.preventDefault()">
+              <i class="fs-6 fas fa-wrench"></i>
+              <span class="fs-4 ms-3 d-none d-sm-inline">home</span>
+            </a>
+          </li>
         </ul>
-    </nav>
-</div>
+      </div>
+  <!-- conent section -->
+    <div class="sidebar-content" id="sidebar-content">
+       <!-- Content will be dynamically loaded here -->
+    </div>
+  </div>
+  <!-- end of content section -->
+  <script>
+    $(document).ready(function() {
+        // Function to load sidebar content from local storage
+        function loadSidebarContent() {
+            var content = localStorage.getItem('sidebarContent');
+            if (content) {
+                $("#sidebar-content").html(content);
+            }
+        }
+
+        // Handle click events on sidebar links
+        $(".sidebar-link").click(function(event) {
+            event.preventDefault();  // Prevent default link behavior
+            
+            // Get the URL from the data-url attribute
+            var url = $(this).data('url');
+            
+            // Make an AJAX request to the Flask route
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function(response) {
+                    // Replace the content area with the fetched content
+                    $("#sidebar-content").html(response);
+                    // Save the content to local storage
+                    localStorage.setItem('sidebarContent', response);
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error fetching content:", error);
+                }
+            });
+        });
+
+        // Load sidebar content on initial page load
+        loadSidebarContent();
+    });  
+</script>
+
 {% endblock %}

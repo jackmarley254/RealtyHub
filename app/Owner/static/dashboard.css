@@ -1,87 +1,58 @@
 /* import google fonts */
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
 * {
     margin: 0;
     padding: 0;
-    outline: none;
-    border: none;
-    box-sizing: border-box;
+    list-style: none;
     text-decoration: none;
-    font-family: 'Roboto', sans-serif;
-    list-style-type: none;
 }
 
-body {
-    background: #dfe9f5;
+.sidebar {
+    position: fixed;
+    left: 250px;
+    width: 250px;
+    height: 100%;
+    background: #042331;
+    transition: all 0.5s ease;
+    margin-top: -70px;
+    margin-left: -250px;
 }
 
-.container {
-    display: flex;
-}
-
-.dashboard {
-    position: relative;
-    top: 0;
-    bottom: 0;
-    height: 100vh;
-    left: 0;
-    background: #fff;
-    width: 280px;
-    overflow: hidden;
-    box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
-    margin-top: -37px;
-    margin-left: -110px;
-}
-
-.logo {
+.sidebar header {
+    font-size: 22px;
+    color: white;
     text-align: center;
-    display: flex;
-    margin: 10px 0 0 10px;
+    line-height: 70px;
+    background: #063146;
+    user-select: none;
+    margin-bottom: 20px;
+    transition: all 0.5s;
 }
 
-.logo img {
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-}
-.logo span {
-    font-weight: bold;
-    padding-left: 15px;
-    font-size: 18px;
-    text-transform: uppercase;
-}
-
- .dashboard a {
-    position: relative;
-    color: rgb(85,83, 83);
-    font-size: 14px;
-    display: table;
-    width: 280px;
-    padding: 10px;
-}
-
-nav .fas{
-    position: relative;
-    width: 70px;
-    height: 40px;
-    top: 14px;
+.sidebar ul a {
+    display: block;
+    height: 100%;
+    width: 100%;
+    line-height: 65px;
     font-size: 20px;
-    text-align: center;
+    color: white;
+    padding-left: 40px;
+    box-sizing: border-box;
+    border-top: 1px solid rgba(255, 255, 255, .1);
+    border-bottom: 1px solid black;
+    transition: 0.4s;
 }
 
-.nav-item{
-    position: relative;
-    top: 12px;
-    margin-left: 10px;
+ul li:hover a {
+    padding-left: 50px;
 }
 
-a:hover {
-    background: #f1f1f1;
-    color: #333;
+.sidebar ul a i {
+    margin-right: 16px;
 }
 
-.logout {
-    position: absolute;
-    bottom: 0;
-}
