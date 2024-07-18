@@ -1,0 +1,80 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2>Messages</h2>
+<div class="row">
+    <div class="col-md-4">
+        <h4>Users</h4>
+        <ul>
+            {% for user in users %}
+            <li><a href="#" class="user-link" data-id="{{ user.id }}">{{ user.username }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="col-md-4">
+        <h4>Received Messages</h4>
+        <ul id="receivedMessages">
+            {% for message in received_messages %}
+            <li>{{ message.sender.username }}: {{ message.content }} ({{ message.date_posted }})</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="col-md-4">
+        <h4>Sent Messages</h4>
+        <ul id="sentMessages">
+            {% for message in sent_messages %}
+            <li>To {{ message.receiver.username }}: {{ message.content }} ({{ message.date_posted }})</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+<div class="row mt-4">
+    <div class="col-md-12">
+        <h4>Send Message</h4>
+        <form id="messageForm" method="POST">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                <label for="recipient">Recipient</label>
+                {{ form.recipient(class="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ form.content.label(class="form-control-label") }}
+                {{ form.content(class="form-control", id="messageContent") }}
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Send</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.min.js"></script>
+<script>
+    var socket = io();
+
+    socket.on('receive_message', function(msg) {
+        var receivedMessages = document.getElementById('receivedMessages');
+        var newMessage = document.createElement('li');
+        newMessage.textContent = msg.sender + ': ' + msg.content;
+        receivedMessages.appendChild(newMessage);
+    });
+
+    var form = document.getElementById('messageForm');
+    form.onsubmit = function(e) {
+        e.preventDefault();
+        var messageContent = document.getElementById('messageContent').value;
+        var recipientId = document.getElementById('recipient').value;
+        socket.emit('send_message', {
+            sender_id: {{ current_user.id }},
+            receiver_id: recipientId,
+            content: messageContent
+        });
+        document.getElementById('messageContent').value = '';
+    };
+
+    document.querySelectorAll('.user-link').forEach(function(link) {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('recipient').value = this.dataset.id;
+        });
+    });
+</script>
+{% endblock %}
