@@ -5,6 +5,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
+from flask_socketio import SocketIO
+
 
 app = Flask(__name__)
 
@@ -17,15 +19,15 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 Base = db.Model
-
 bcrypt = Bcrypt(app)
+socketio = SocketIO(app)
 
 # Initialize the login manager
 login_manager = LoginManager(app)
 login_manager.init_app(app)
 login_manager.blueprint_login_views = {
     'tenant': 'tenant.login',
-    'owner': 'investor.login'
+    'owner': 'owner.login'
 }
 login_manager.session_protection = "strong"
 
@@ -51,8 +53,10 @@ def load_user(user_id):
         _type_: The user id
     """
     x = Owner.query.get(str(user_id))
+    print(x)
     if x == None:
         x = Tenant.query.get(str(user_id))
+        print(x)
         
     return x
 

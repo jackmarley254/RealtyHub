@@ -1,9 +1,12 @@
 #!/usr/bin/python3
 """ The views for the application """
-from flask import render_template, url_for, flash, redirect, request, Blueprint
+import os
+import secrets
+from PIL import Image
+from flask import render_template, url_for, flash, redirect, request, Blueprint, current_app
 from app import app, db, bcrypt
-from app.models import Tenant, Property, Owner, TenantProperty, PropertyStatus
-from .forms import RegisterForm, LoginForm, UpdateUserAccount
+from app.models import Tenant, Property, Owner, TenantProperty, PropertyStatus, Rental, Messages
+from .forms import RegisterForm, LoginForm, UpdateAccountForm
 from flask_login import login_user, current_user, logout_user, login_required, AnonymousUserMixin
 
 # Declare the blueprints
@@ -30,7 +33,7 @@ def register():
     return render_template('register.html', title='Register', form=form)
 
 
-@tenant.route('/login', methods=['GET', 'POST'], strict_slashes=False)
+@tenant.route('/login', methods=['GET', 'POST'],)
 def login():
     """Login endpoint for tenants."""
     if current_user.is_authenticated:
@@ -49,36 +52,46 @@ def login():
     return render_template('login.html', title='Login', form=form)
 
 
-@tenant.route('/logout')
-def logout():
-    """Logout endpoint for tenants."""
-    logout_user()
-    return redirect(url_for('tenant.login'))
+def save_picture(form_picture):
+    # Generate a random hex to prevent filename collisions
+    random_hex = secrets.token_hex(8)
+    _, f_ext = os.path.splitext(form_picture.filename)
+    picture_fn = random_hex + f_ext
+    picture_path = os.path.join(current_app.root_path, 'Tenant/static/profile_pics', picture_fn)
+    
+    # Ensure the directory exists
+    os.makedirs(os.path.dirname(picture_path), exist_ok=True)
+    
+    # Resize the image before saving
+    output_size = (125, 125)
+    i = Image.open(form_picture)
+    i.thumbnail(output_size)
+    
+    # Save the picture
+    i.save(picture_path)
+    
+    return picture_fn
 
-@tenant.route('/dashboard')
-@login_required
-def dashboard():
-    """Dashboard endpoint for tenants."""
-    properties = Property.query.filter_by(owner_id=current_user.id).all()
-    return render_template('dashboard.html', title='Dashboard', properties=properties)
 
-@tenant.route('/account', methods=['GET', 'POST'])
+@tenant.route("/account", methods=['GET', 'POST'], strict_slashes=False)
 @login_required
-def account():
-    """Update account endpoint for tenants."""
-    form = UpdateUserAccount()
+def accounts():
+    form = UpdateAccountForm()
     if form.validate_on_submit():
+        if form.picture.data:
+            picture_file = save_picture(form.picture.data)
+            current_user.image_file = picture_file
         current_user.username = form.username.data
-        current_user.phone = form.phone.data
-        current_user.profile_image = form.profile_image.data
+        current_user.email = form.email.data
         db.session.commit()
         flash('Your account has been updated!', 'success')
-        return redirect(url_for('tenant.account'))
+        return redirect(url_for('users.account'))
     elif request.method == 'GET':
         form.username.data = current_user.username
-        form.phone.data = current_user.phone
-        form.profile_image.data = current_user.profile_image
-    return render_template('account.html', title='Account', form=form)
+        form.email.data = current_user.email
+    image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
+    return render_template('updates.html', title='Account', image_file=image_file, form=form)
+
 
 @tenant.route('/property/<int:property_id>/apply', methods=['GET', 'POST'], strict_slashes=False)
 @login_required
@@ -115,3 +128,19 @@ def apply_property(property_id):
     db.session.commit()
     flash('Application successful!', 'success')
     return redirect(url_for("#dashboard"))
+
+@tenant.route("/dashboard", methods=['GET'], strict_slashes=False)
+@login_required
+def dashboard():
+    """Endpoint for the tenant dashboard
+
+    Returns:
+        _type_: _description_
+    """
+    if isinstance(current_user, Owner) or isinstance(current_user, AnonymousUserMixin):
+        flash('You are not authorized to view this page', 'danger')
+        return redirect(url_for('main.home'))
+    # Retrieve relevant data for the tenant
+    rented_properties = Property.query.join(Rental, Rental.property_id == Property.id).filter(Rental.tenant_id == current_user.id).all()
+    messages = Messages.query.filter_by(receiver_id=current_user.id).all()
+    return render_template('dashboard.html', rented_properties=rented_properties, messages=messages)

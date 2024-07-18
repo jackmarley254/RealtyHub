@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2>Send Message to {{ receiver.username }}</h2>
+<form id="messageForm">
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+        {{ form.content.label(class="form-control-label") }}
+        {{ form.content(class="form-control", id="messageContent") }}
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Send</button>
+    </div>
+</form>
+<script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.min.js"></script>
+<script>
+    var socket = io();
+    var form = document.getElementById('messageForm');
+    form.onsubmit = function(e) {
+        e.preventDefault();
+        var messageContent = document.getElementById('messageContent').value;
+        socket.emit('send_message', {
+            sender_id: {{ current_user.id }},
+            receiver_id: {{ receiver.id }},
+            content: messageContent
+        });
+        document.getElementById('messageContent').value = '';
+    };
+</script>
+{% endblock %}
