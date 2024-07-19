@@ -44,7 +44,7 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = Owner.query.filter_by(email=form.email.data).first()
-        if user and bcrypt.check_password_hash(owner.password, form.
+        if user and bcrypt.check_password_hash(user.password, form.
                                                password.data):
             login_user(user, remember=form.remember_me.data)
             flash('Login successful', 'success')
