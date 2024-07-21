@@ -100,27 +100,37 @@ def create_property():
 @login_required
 def update_property(property_id):
     """ Allows the owner to update a property """
-    # we check if the current_user is an Owner
-    prop = Property.query.get_or_404(id=property_id)
-    if prop.owners != current_user.id:
+    # Check if the current_user is the owner
+    prop = Property.query.get_or_404(property_id)
+    if prop.owner_id != current_user.id:
         abort(403)
     
-    form = UpdatePropertyForm()
-    if  form.validate_on_submit():  
-        prop.title = request.form.get('title')
-        prop.description = request.form.get('description')
-        prop.price = request.form.get('price')
-        prop.location = request.form.get('location')
-        prop.property_type = request.form.get('property_type')
-        prop.bedrooms = request.form.get('bedrooms')
-        prop.bathrooms = request.form.get('bathrooms')
-        prop.size = request.form.get('size')
-        prop.amenities = request.form.get('amenities')
-        prop.available_from = request.form.get('available_from')
-
+    form = UpdatePropertyForm(obj=prop)  # Initialize form with existing data
+    if form.validate_on_submit():
+        # Update property attributes with form data
+        prop.title = form.title.data
+        prop.description = form.description.data
+        prop.price = form.price.data
+        prop.location = form.location.data
+        prop.property_type = form.property_type.data
+        prop.bedrooms = form.bedrooms.data
+        prop.bathrooms = form.bathrooms.data
+        prop.size = form.size.data
+        # prop.amenities = form.amenities.data
+        prop.available_from = form.available_from.data
+        
+        # Handle file uploads
+        if form.thumbnail1.data:
+            prop.thumbnail1 = save_picture(form.image1.data)
+            prop.thumbnail2 = save_picture(form.image2.data)
+        if form.thumbnail3.data:
+            prop.thumbnail3 = save_picture(form.image3.data)
+        
         db.session.commit()
         flash('Property updated successfully', 'success')
+        return redirect(url_for('proprety.view_created_property'))  # Redirect after successful update
     elif request.method == 'GET':
+        # Prepopulate the form with existing property data
         form.title.data = prop.title
         form.description.data = prop.description
         form.price.data = prop.price
@@ -129,23 +139,11 @@ def update_property(property_id):
         form.bedrooms.data = prop.bedrooms
         form.bathrooms.data = prop.bathrooms
         form.size.data = prop.size
-        form.amenities.data = prop.amenities
+        # form.amenities.data = prop.amenities
         form.available_from.data = prop.available_from
 
-    return render_template('#update_property.html', form=form)
+    return render_template('update_property.html', form=form, prop=prop)
 
-@proprety.route('properties/<int:property_id>/delete', methods=['GET', 'POST'])
-@login_required
-def delete_property(property_id):
-    """ Allows the owner to delete a property """
-    # Query the database to get the property
-    prop = Property.query.get_or_404(property_id)
-    if prop.owners != current_user.id:
-        abort(403)
-
-    db.session.delete(prop)
-    db.session.commit()
-    flash('Property deleted successfully', 'success')
 
 
 @proprety.route('properties/<int:property_id>/view', methods=['GET'])
@@ -227,13 +225,15 @@ def get_properties():
     per_page = 9  # 3 columns * 3 rows
 
     properties = Property.query.paginate(page=page, per_page=per_page)
+    print(f'Properties: {properties.items}')  # Debug print
+    print(f'Pagination: {properties}')  # Debug print
     
     return render_template('show_property.html', properties=properties.items, pagination=properties)
 
+@proprety.route('/my_properties', methods=['GET'])
 @login_required
 def view_created_property():
-    """ Allows the owner view created properties """
-    # if the current_user is a Tenant
+    """ Allows the owner to view created properties """
     if isinstance(current_user, Tenant):
         abort(403)
     user_id = current_user.id
@@ -243,3 +243,19 @@ def view_created_property():
     user_properties = Property.query.filter_by(owner_id=user.id).all()
     
     return render_template('dashboard.html', user=user, properties=user_properties)
+
+@proprety.route('/properties/<int:property_id>/delete', methods=['POST'])
+@login_required
+def delete_property(property_id):
+    """ Allows the owner to delete a property """
+    prop = Property.query.get_or_404(property_id)
+    
+    if prop.owner_id != current_user.id:
+        abort(403)
+    
+    db.session.delete(prop)
+    db.session.commit()
+    flash('Property deleted successfully', 'success')
+    
+    return redirect(url_for('proprety.view_created_property'))
+

@@ -3,7 +3,7 @@
 <div class="container mt-5">
     <h2>Properties</h2>
     <div class="row row-cols-1 row-cols-md-3 g-4">
-        {% for property in recent_properties %}
+        {% for property in properties %}
             <div class="col-md-4 mb-4">
                 <div class="card h-100">
                     {% if property.thumbnail1 %}
@@ -34,8 +34,29 @@
                     </div>
                 </div>
             </div>
+        {% endfor %}
+    </div>
+    <!-- Pagination controls -->
+    <div class="mt-4">
+        <ul class="pagination">
+            {% if pagination.has_prev %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('proprety.get_properties', page=pagination.prev_num) }}">Previous</a>
+                </li>
+            {% endif %}
+            {% for page_num in pagination.iter_pages() %}
+                {% if page_num %}
+                    <li class="page-item {% if page_num == pagination.page %}active{% endif %}">
+                        <a class="page-link" href="{{ url_for('proprety.get_properties', page=page_num) }}">{{ page_num }}</a>
+                    </li>
+                {% endif %}
             {% endfor %}
-        
+            {% if pagination.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('proprety.get_properties', page=pagination.next_num) }}">Next</a>
+                </li>
+            {% endif %}
+        </ul>
     </div>
 </div>
 {% endblock %}

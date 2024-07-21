@@ -31,21 +31,21 @@ class PropertyForm(FlaskForm):
     submit = SubmitField('Create Property')
 
 class UpdatePropertyForm(FlaskForm):
-    """ The update property form
-
-    Args:
-        FlaskForm (_type_): Update property form to validate the property
-    """
     title = StringField('Title', validators=[DataRequired()])
-    description = StringField('Description', validators=[DataRequired()])
+    description = TextAreaField('Description', validators=[DataRequired()])
+    price = IntegerField('Price', validators=[DataRequired()])
     location = StringField('Location', validators=[DataRequired()])
-    price = StringField('Price', validators=[DataRequired()])
-    property_type = StringField('Property Type', validators=[DataRequired()])
-    property_status = StringField('Property Status', validators=[DataRequired()])
-    bathrooms = StringField('Nos Bathrooms', validators=[DataRequired()])
-    bedrooms = StringField('Nos Bedrooms', validators=[DataRequired()])
-    size = StringField('Size', validators=[DataRequired()])
-    submit = SubmitField('Update Property')
+    property_type = SelectField('Property Type', choices=[('House', 'House'), ('Apartment', 'Apartment'), ('Condo', 'Condo')], validators=[DataRequired()])
+    property_status = SelectField('Property Status', choices=[('For Sale', 'For Sale'), ('For Rent', 'For Rent')], validators=[DataRequired()])
+    bedrooms = IntegerField('Bedrooms', validators=[DataRequired()])
+    bathrooms = IntegerField('Bathrooms', validators=[DataRequired()])
+    size = IntegerField('Size (sqft)', validators=[DataRequired()])
+    # amenities = StringField('Amenities')
+    available_from = DateField('Available From', format='%Y-%m-%d')
+    thumbnail1 = FileField('Thumbnail 1')
+    thumbnail2 = FileField('Thumbnail 2')
+    thumbnail3 = FileField('Thumbnail 3')
+    submit = SubmitField('Update')
 
 
 class SearchForm(FlaskForm):
