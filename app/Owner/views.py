@@ -98,21 +98,3 @@ def account():
     return render_template('update.html', title='Account', image_file=image_file, form=form)
 
 
-@owner.route("/dashboard", methods=['GET'])
-@login_required
-def dashboard():
-    """ routes to the dasboard
-
-    Returns:
-        _type_: _description_
-    """
-    if not current_user.is_authenticated or isinstance(current_user, AnonymousUserMixin):
-        flash('You do not have permission to view this page', 'danger')
-        return redirect(url_for('main.home'))
-    # Retrieve relevant data for the owner
-    properties = Property.query.filter_by(owner_id=current_user.id).all()
-    messages = Messages.query.filter_by(receiver_id=current_user.id).all()
-    # tenants = Tenant.query.filter(Property.owner_id==current_user.id).all()
-    return render_template('on_dasboard.html', properties=properties, messages=messages)
-
-

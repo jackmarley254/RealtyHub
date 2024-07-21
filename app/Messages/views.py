@@ -3,7 +3,7 @@ from flask import render_template, url_for, flash, redirect, request, Blueprint
 from app import db, socketio
 from app.models import Messages, Users, Property
 from .forms import ReplyForm
-from flask_login import current_user, login_required
+from flask_login import current_user, login_required, AnonymousUserMixin
 from flask_socketio import emit
 
 # Declare the blueprints
@@ -61,7 +61,7 @@ def view_message(message_id):
 
 @socketio.on('send_message')
 def handle_send_message(data):
-    if not current_user.is_authenticated:
+    if not current_user.is_authenticated or isinstance(current_user, AnonymousUserMixin):
         # Notify client to redirect to login page
         emit('authentication_error', {
             'message': 'You need to be logged in to send a message.'

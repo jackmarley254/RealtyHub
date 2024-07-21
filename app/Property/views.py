@@ -231,11 +231,12 @@ def get_properties():
     return render_template('show_property.html', properties=properties.items, pagination=properties)
 
 @proprety.route('/my_properties', methods=['GET'])
-@login_required
-def view_created_property():
+def my_properties():
     """ Allows the owner to view created properties """
-    if isinstance(current_user, Tenant):
-        abort(403)
+    if not current_user.is_authenticated and isinstance(current_user, AnonymousUserMixin):
+        flash('You cannot view created properties!', 'danger')
+        return redirect(url_for('main.home'))
+    
     user_id = current_user.id
     user = Owner.query.get_or_404(user_id)
     
