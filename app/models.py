@@ -124,7 +124,8 @@ class Property(Base):
     location = Column(String(200), nullable=False)
     price = Column(Integer, nullable=False)
     property_type = Column(String(200), nullable=False)
-    property_status = Mapped[PropertyStatus]
+    # property_status = Mapped[PropertyStatus]
+    property_status = Column(String(200), nullable=False)
     bathrooms = Column(Integer, nullable=False)
     bedrooms = Column(Integer, nullable=False)
     size = Column(Integer, nullable=False)

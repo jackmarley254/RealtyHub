@@ -30,8 +30,8 @@
               aria-expanded="false"><i class="fas fa-th-large"></i>Property</a>
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" href="{{ url_for('proprety.create_property') }}"><i class="fas fa-th-large"></i>Create Property</a></li>
-              <li><a class="dropdown-item" href="#"><i class="fas fa-th-large"></i> Pricing</a></li>
-              <li><a class="dropdown-item" href="#"><i class="fas fa-th-large"></i> Owner Guarantees</a></li>
+              <li><a class="dropdown-item" href="{{ url_for('proprety.search_properties') }}"><i class="fas fa-th-large"></i> Search Property</a></li>
+              <li><a class="dropdown-item" href="{{ url_for('proprety.get_properties') }}"><i class="fas fa-th-large"></i> Show Properties</a></li>
               <li><a class="dropdown-item" href="#"><i class="fas fa-th-large"></i> Owner FAQs</a></li>
               <li><a class="dropdown-item" href="#"><i class="fas fa-th-large"></i> Free Rental Analysis</a></li>
               <li><a class="dropdown-item" href="#"><i class="fas fa-th-large"></i> Property Management Agreement</a></li>

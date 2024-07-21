@@ -3,21 +3,19 @@
 <div class="container mt-5">
     <h2>Properties</h2>
     <div class="row row-cols-1 row-cols-md-3 g-4">
-        {% for property in properties %}
-        <div class="col">
-            <div class="card h-100">
-                {% if property.image1 %}
-                <a href="{{ url_for('proprety.view_property', property_id=property.id) }}">
-                    <img src="{{ url_for('static', filename='property_pics/' + property.image1) }}" class="card-img-top" alt="...">
-                </a>
-                {% else %}
-                <img src="{{ url_for('static', filename='property_pics/default.jpg') }}" class="card-img-top" alt="No Image Available">
-                </a>
-                {% endif %}
-                <div class="card-body">
-                    <h3 class="card-title"><strong>{{ property.title }}</strong></h3>
-                    <p class="card-text">{{ property.description }}</p>
-                    <p class="card-text"><strong>Price:</strong> ${{ property.price }}</p>
+        {% for property in recent_properties %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    {% if property.thumbnail1 %}
+                        <img src="{{ url_for('static', filename='property_pics/' + property.thumbnail1) }}" class="card-img-top" alt="{{ property.title }}">
+                    {% else %}
+                        <img src="{{ url_for('static', filename='property_pics/default.jpg') }}" class="card-img-top" alt="No Image Available">
+                    {% endif %}
+                    <div class="card-body">
+                        <h4 class="card-title"><strong>{{ property.title }}</strong></h4>
+                        <p class="card-text"><strong>{{ property.property_status }}</strong></p>
+                        <p class="card-text">{{ property.description[:100] }}...</p>
+                        <p class="card-text"><strong>Price:</strong> ${{ property.price }}</p>
                     <ul class="list-inline mt-3">
                         <li class="list-inline-item">
                             <i class="fas fa-home"></i> {{ property.property_type }}
@@ -32,10 +30,12 @@
                             <i class="fas fa-ruler-combined"></i> {{ property.size }} sqft
                         </li>
                     </ul>
+                        <a href="{{ url_for('proprety.view_property', property_id=property.id) }}" class="btn btn-primary">View Details</a>
+                    </div>
                 </div>
             </div>
-        </div>
-        {% endfor %}
+            {% endfor %}
+        
     </div>
 </div>
 {% endblock %}

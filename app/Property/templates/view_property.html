@@ -21,7 +21,7 @@
                                 <img src="{{ url_for('static', filename='property_pics/' + property.image3) }}" class="d-block w-100" alt="Image 3">
                             </div>
                         {% endif %}
-                        <!-- Add more images similarly if needed -->
+                        <!-- more images similarly if needed -->
                     </div>
                     <a class="carousel-control-prev" href="#propertyCarousel" role="button" data-slide="prev">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -31,20 +31,23 @@
                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                         <span class="sr-only">Next</span>
                     </a>
-                </div>                
+                </div>  
+            </br>              
                 <div class="card-body">
-                    <h5 class="card-title">{{ property.title }}</h5>
+                    <h4 class="card-title"><strong>{{ property.title }}</strong></h4>
+                </br>
                     <p class="card-text">{{ property.description }}</p>
                     <p class="card-text"><strong>Price:</strong> ${{ property.price }}</p>
+                    <p class="card-text"><strong>Location: {{ property.location }}</strong></p>
                     <ul class="list-inline mt-3">
                         <li class="list-inline-item">
                             <i class="fas fa-home"></i> {{ property.property_type }}
                         </li>
                         <li class="list-inline-item">
-                            <i class="fas fa-bed"></i> {{ property.bedrooms }} bd
+                            <i class="fas fa-bed"></i> {{ property.bedrooms }} Bedrooms
                         </li>
                         <li class="list-inline-item">
-                            <i class="fas fa-bath"></i> {{ property.bathrooms }} ba
+                            <i class="fas fa-bath"></i> {{ property.bathrooms }} Bathrooms
                         </li>
                         <li class="list-inline-item">
                             <i class="fas fa-ruler-combined"></i> {{ property.size }} sqft
@@ -61,7 +64,7 @@
                 <a href="https://pinterest.com/pin/create/button/?url={{ request.url }}" target="_blank">Pinterest</a>
             </p>
             <h3>Contact Agent</h3>
-            <form id="contact-form">
+            <form id="contact-form" class="mt-5">
                 <div class="form-group">
                     <label for="name">Name</label>
                     <input type="text" class="form-control" id="name" name="name" required>

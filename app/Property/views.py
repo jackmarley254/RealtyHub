@@ -167,6 +167,7 @@ def search_properties():
         property_status = form.property_status.data
         min_bedrooms = form.min_bedrooms.data
         min_bathrooms = form.min_bathrooms.data
+
         limit = 10
         offset = 0
 
@@ -190,30 +191,35 @@ def search_properties():
         properties = query.limit(limit).offset(offset).all()
         properties_list = [
             {
-                'id': property.id,
-                'title': property.title,
-                'description': property.description,
-                'price': property.price,
-                'location': property.location,
-                'property_type': property.property_type,
-                'property_status': property.property_status,
-                'bedrooms': property.bedrooms,
-                'bathrooms': property.bathrooms,
-                'size': property.size,
-                'amenities': property.amenities,
-                'available_from': property.available_from,
-                'owner_id': property.owner_id,
-                'created_at': property.created_at,
-                'updated_at': property.updated_at
+                'id': property_item.id,
+                'title': property_item.title,
+                'description': property_item.description,
+                'price': property_item.price,
+                'location': property_item.location,
+                'property_type': property_item.property_type,
+                'property_status': property_item.property_status,
+                'bedrooms': property_item.bedrooms,
+                'bathrooms': property_item.bathrooms,
+                'size': property_item.size,
+                'available_from': property_item.available_from,
+                'owner_id': property_item.owner_id,
+                'created_at': property_item.created_at,
+                'thumbnail1': property_item.thumbnail1
             }
-            for property in properties
+            for property_item in properties
         ]
+         # Debugging individual property attributes
+        # for prop in properties_list:
+            # print("Data:", prop) 
+            # print("Thumbnail path:", prop.get('thumbnail1'))
+
+        if not properties_list:
+            flash('No properties found matching the search criteria.', 'warning')
 
     return render_template('search.html', form=form, properties=properties_list)
- 
 
+ 
 @proprety.route('/properties', methods=['GET'], strict_slashes=False)
-@login_required
 def get_properties():
     """ Get all properties """
     # Pagination settings
@@ -222,7 +228,7 @@ def get_properties():
 
     properties = Property.query.paginate(page=page, per_page=per_page)
     
-    return render_template('view_property.html', properties=properties.items, pagination=properties)
+    return render_template('show_property.html', properties=properties.items, pagination=properties)
 
 @login_required
 def view_created_property():

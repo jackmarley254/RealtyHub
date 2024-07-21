@@ -30,8 +30,8 @@
               aria-expanded="false"><i class="fas fa-th-large"></i>Property</a>
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" href="{{ url_for('proprety.create_property') }}"><i class="fas fa-th-large"></i> Create Property</a></li>
-              <li><a class="dropdown-item" href="#"><i class="fas fa-th-large"></i> Pricing</a></li>
-              <li><a class="dropdown-item" href="#"><i class="fas fa-th-large"></i> Owner Guarantees</a></li>
+              <li><a class="dropdown-item" href="{{ url_for('proprety.search_properties') }}"><i class="fas fa-th-large"></i> Search Property</a></li>
+              <li><a class="dropdown-item" href="{{ url_for('proprety.get_properties') }}"><i class="fas fa-th-large"></i> Show Properties</a></li>
               <li><a class="dropdown-item" href="#"><i class="fas fa-th-large"></i> Owner FAQs</a></li>
               <li><a class="dropdown-item" href="#"><i class="fas fa-th-large"></i> Free Rental Analysis</a></li>
               <li><a class="dropdown-item" href="#"><i class="fas fa-th-large"></i> Property Management Agreement</a></li>
@@ -283,6 +283,7 @@
                     {% endif %}
                     <div class="card-body">
                         <h4 class="card-title"><strong>{{ property.title }}</strong></h4>
+                        <p class="card-text"><strong>{{ property.property_status }}</strong></p>
                         <p class="card-text">{{ property.description[:100] }}...</p>
                         <p class="card-text"><strong>Price:</strong> ${{ property.price }}</p>
                     <ul class="list-inline mt-3">
