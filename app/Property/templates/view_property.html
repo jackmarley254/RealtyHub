@@ -124,8 +124,7 @@ document.addEventListener("DOMContentLoaded", function() {
         // Handle authentication error
         socket.on('authentication_error', function(data) {
             alert(data.message); // Display the error message
-            var currentUrl = window.location.href; // Get current URL
-            window.location.href = 'tenant.login?next=' + encodeURIComponent(currentUrl); // Redirect to login page with next parameter
+           
         });
 
         // Handle message reception
