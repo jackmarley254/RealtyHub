@@ -45,8 +45,9 @@ def login():
         if tenant and bcrypt.check_password_hash(tenant.password, form.password.data):
             login_user(tenant, remember=form.remember_me.data)
             flash('Login Successful', 'success')
-            next_page = request.args.get('next')
-            return redirect(next_page) if next_page else redirect(url_for('main.home'))
+            # Redirect to the previous page or to the homepage if no previous page is provided
+            next_page = request.args.get('next') or url_for('main.home')
+            return redirect(next_page)
         else:
             flash('Login Unsuccessful. Please check email and password', 'danger')
     return render_template('login.html', title='Login', form=form)

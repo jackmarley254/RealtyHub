@@ -15,3 +15,7 @@ class MessageForm(FlaskForm):
     recipient = StringField('Recipient', validators=[DataRequired()])
     content = TextAreaField('Message', validators=[DataRequired()])
     submit = SubmitField('Send')
+    
+class ReplyForm(FlaskForm):
+    message = TextAreaField('Reply', validators=[DataRequired()])
+    submit = SubmitField('Send Reply')

@@ -48,8 +48,9 @@ def login():
                                                password.data):
             login_user(user, remember=form.remember_me.data)
             flash('Login successful', 'success')
-            next_page = request.args.get('next')
-            return redirect(next_page) if next_page else redirect(url_for('main.home'))
+           # Redirect to the previous page or to the homepage if no previous page is provided
+            next_page = request.args.get('next') or url_for('main.home')
+            return redirect(next_page)
         else:
             
             flash('Login unsuccesful. Please check email and password', 'danger')
@@ -92,7 +93,7 @@ def account():
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.email.data = current_user.email
-    image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
+        image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
     
     return render_template('update.html', title='Account', image_file=image_file, form=form)
 

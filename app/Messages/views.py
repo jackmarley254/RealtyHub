@@ -1,65 +1,108 @@
-#!/usr/bin/python3
-""" The views for the application """
+from datetime import datetime
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from app import db, socketio
-from app.models import Messages, Messages, Users
-from .forms import MessageForm
-from flask_login import current_user, login_required, AnonymousUserMixin
+from app.models import Messages, Users, Property
+from .forms import ReplyForm
+from flask_login import current_user, login_required
 from flask_socketio import emit
 
 # Declare the blueprints
 messages = Blueprint('messages', __name__, url_prefix="/messages", template_folder='templates', static_folder='static')
 
 
-# Write the endpoints for messages
-
-@messages.route("/messages", methods=['GET', 'POST'], strict_slashes=False)
-@login_required
+@messages.route('/', methods=['GET', 'POST'], strict_slashes=False)
 def allmessages():
-    if not current_user.is_authenticated or isinstance(current_user, AnonymousUserMixin):
+    """ The messages page """
+    if not current_user.is_authenticated:
         flash('You have to be logged in before you can send a message!', 'warning')
         return redirect(url_for("main.home"))
     
-    form = MessageForm()
-    form.recipient.choices = [(user.id, user.username) for user in Users.query.filter(Users.id != current_user.id).all()]
-
-    if form.validate_on_submit():
-        recipient_id = form.recipient.data
-        content = form.content.data
-        message = Messages(sender_id=current_user.id, receiver_id=recipient_id, content=content)
-        db.session.add(message)
-        db.session.commit()
-        
-        # Emit the message using SocketIO
-        socketio.emit('receive_message', {
-            'sender': current_user.username,
-            'content': content
-        }, room=recipient_id)
-        
-        flash('Message sent successfully!', 'success')
-        return redirect(url_for('messages.allmessages'))
-
     users = Users.query.filter(Users.id != current_user.id).all()
     received_messages = Messages.query.filter_by(receiver_id=current_user.id).all()
-    sent_messages = Messages.query.filter_by(sender_id=current_user.id).all()
-    return render_template('message.html', users=users, received_messages=received_messages, sent_messages=sent_messages, form=form)
+    unread_count = Messages.query.filter_by(receiver_id=current_user.id, read=False).count()
 
-@messages.route("/send_message/<int:receiver_id>", methods=['GET', 'POST'])
+    return render_template('message.html', users=users, received_messages=received_messages, unread_count=unread_count)
+
+
+@messages.route('/<int:message_id>', methods=['GET', 'POST'], strict_slashes=False)
 @login_required
-def send_message(receiver_id):
-    form = MessageForm()
-    receiver = Users.query.get_or_404(receiver_id)
-    if form.validate_on_submit():
-        message = Messages(sender_id=current_user.id, receiver_id=receiver.id, content=form.content.data)
-        db.session.add(message)
+def view_message(message_id):
+    message = Messages.query.get_or_404(message_id)
+    sender = Users.query.get_or_404(message.sender_id)
+    property_details = Property.query.get_or_404(message.property_id)
+    reply_form = ReplyForm()
+
+    # Get the full conversation
+    conversation = Messages.query.filter(
+        (Messages.sender_id == current_user.id) | (Messages.receiver_id == current_user.id),
+        (Messages.sender_id == sender.id) | (Messages.receiver_id == sender.id),
+        Messages.property_id == message.property_id
+    ).order_by(Messages.timestamp).all()
+
+    if reply_form.validate_on_submit():
+        new_message = Messages(
+            sender_id=current_user.id,
+            receiver_id=message.sender_id,
+            message=reply_form.message.data,
+            property_id=message.property_id
+        )
+        db.session.add(new_message)
         db.session.commit()
-        flash('Your message has been sent!', 'success')
-        return redirect(url_for('owner.messages'))
-    return render_template('send_messages.html', form=form, receiver=receiver)
+        # flash('Reply sent!', 'success')
+        return redirect(url_for('messages.view_message', message_id=message.id))
+
+    message.read = True  # Mark the message as read when it is viewed
+    db.session.commit()
+
+    return render_template('view_messages.html', message=message, sender=sender, property_details=property_details, reply_form=reply_form, conversation=conversation)
+
+
+
 
 @socketio.on('send_message')
-def handle_send_message(json):
-    message = Messages(sender_id=json['sender_id'], receiver_id=json['receiver_id'], content=json['content'])
-    db.session.add(message)
+def handle_send_message(data):
+    if not current_user.is_authenticated:
+        # Notify client to redirect to login page
+        emit('authentication_error', {
+            'message': 'You need to be logged in to send a message.'
+        })
+        return
+
+    sender_id = current_user.id
+    property_id = data.get('property_id')
+
+    # Query the Property model to get the property object
+    prop = Property.query.get(property_id)
+
+    if sender_id == prop.owner_id:
+        # If the sender is the owner of the property, do nothing
+        emit('authentication_error', {'message': 'You cannot send a message to yourself.'})
+        return
+
+    receiver_id = data['receiver_id']
+
+    new_message = Messages(
+        sender_id=sender_id,
+        receiver_id=receiver_id,
+        message=data['content'],
+        property_id=property_id
+    )
+    db.session.add(new_message)
     db.session.commit()
-    emit('receive_message', {'sender': message.sender.username, 'content': message.content}, broadcast=True)
+
+    emit('receive_message', {
+        'sender': new_message.sender.username,
+        'content': new_message.message,
+        'timestamp': new_message.timestamp.strftime('%Y-%m-%d %H:%M:%S'),
+        'message_id': new_message.id
+    }, room=str(receiver_id))
+    flash('Message sent!', 'success')
+
+
+
+
+
+@socketio.on('connect')
+def handle_connect():
+    if current_user.is_authenticated:
+        emit('join', {'user_id': current_user.id})

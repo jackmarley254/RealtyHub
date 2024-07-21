@@ -2,9 +2,3 @@
     max-width: 600px;
     margin: auto;
 }
-
-img.rounded-circle {
-    width: 150px;
-    height: 150px;
-    object-fit: cover;
-}

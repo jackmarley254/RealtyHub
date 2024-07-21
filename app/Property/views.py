@@ -25,16 +25,22 @@ def save_picture(form_picture):
     # Ensure the directory exists
     os.makedirs(os.path.dirname(picture_path), exist_ok=True)
 
-    # Save the picture
-    output_size = (125, 125)
-    i = Image.open(form_picture)
-    i.thumbnail(output_size)
-    i.save(picture_path)
+    # Save the original picture
+    form_picture.save(picture_path)
 
-    return picture_fn
+    # Create and save a thumbnail
+    thumbnail_size = (300, 300)
+    thumbnail_fn = random_hex + '_thumb' + f_ext
+    thumbnail_path = os.path.join(current_app.root_path, 'static/property_pics', thumbnail_fn)
+
+    i = Image.open(form_picture)
+    i.thumbnail(thumbnail_size)
+    i.save(thumbnail_path)
+
+    return picture_fn, thumbnail_fn
+
 
 @proprety.route('/add_new', methods=['GET', 'POST'], strict_slashes=False)
-@login_required
 def create_property():
     """ Allows the owner to add a property """
     # Checking if the current user is authenticated
@@ -50,7 +56,6 @@ def create_property():
     # if the current_user is an Owner
     form = PropertyForm()
     if form.validate_on_submit():
-        print('yes')
         new_property = Property(
             title=form.title.data,
             description=form.description.data,
@@ -61,18 +66,23 @@ def create_property():
             bedrooms=int(form.bedrooms.data),
             bathrooms=int(form.bathrooms.data),
             size=int(form.size.data),
-            # amenities=form.amenities.data,
             available_from=datetime.strptime(str(form.available_from.data), '%Y-%m-%d'),
             owner_id=current_user.id
         )
 
         # Handle image uploads
         if form.image1.data:
-            new_property.image1 = save_picture(form.image1.data)
+            image1, thumbnail1 = save_picture(form.image1.data)
+            new_property.image1 = image1
+            new_property.thumbnail1 = thumbnail1
         if form.image2.data:
-            new_property.image2 = save_picture(form.image2.data)
+            image2, thumbnail2 = save_picture(form.image2.data)
+            new_property.image2 = image2
+            new_property.thumbnail2 = thumbnail2
         if form.image3.data:
-            new_property.image3 = save_picture(form.image3.data)
+            image3, thumbnail3 = save_picture(form.image3.data)
+            new_property.image3 = image3
+            new_property.thumbnail3 = thumbnail3
 
         try:
             db.session.add(new_property)
@@ -142,10 +152,9 @@ def delete_property(property_id):
 def view_property(property_id):
     """ Allows the tenant to view a property """
     prop = Property.query.get_or_404(property_id)
-    return render_template('show_property.html', title=prop.title, property=prop)
+    return render_template('view_property.html', title=prop.title, property=prop)
 
     
-
 @proprety.route('/search', methods=['GET', 'POST'], strict_slashes=False)
 def search_properties():
     form = SearchForm()
@@ -164,7 +173,7 @@ def search_properties():
         query = Property.query
 
         if location:
-            query = query.filter(Property.location == location)
+            query = query.filter(Property.location.ilike(f"%{location}%"))
         if min_price is not None:
             query = query.filter(Property.price >= min_price)
         if max_price is not None:

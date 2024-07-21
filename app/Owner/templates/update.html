@@ -3,7 +3,7 @@
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='updates.css') }}">
 
 <div class="container">
-    <h2 class="mt-4">Account</h2>
+    <h2 class="mt-4">Agent Account</h2>
     <div class="row">
         <div class="col-md-4">
             <img src="{{ image_file }}" alt="Profile Picture" class="rounded mx-auto d-block">
@@ -41,7 +41,7 @@
                     {{ form.picture.label(class="form-control-label") }}
                     {{ form.picture(class="form-control-file") }}
                 </div>
-                <button type="submit" class="btn btn-primary mt-3">Update</button>
+                <button type="submit" class="btn btn-primary mt-3 row-cols-7 d-flex justify-content-center">Update</button>
             </form>
         </div>
     </div>
