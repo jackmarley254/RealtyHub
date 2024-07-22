@@ -21,8 +21,8 @@ class PropertyForm(FlaskForm):
     location = StringField('Location', validators=[DataRequired(), Length(min=2, max=200)])
     property_type = SelectField('Property Type', choices=[('House', 'House'), ('Apartment', 'Apartment'), ('Condo', 'Condo')], validators=[DataRequired()])
     property_status = SelectField('Property Status', choices=[('For Sale', 'For Sale'), ('For Rent', 'For Rent')], validators=[DataRequired()])
-    bedrooms = IntegerField('Bedrooms', validators=[DataRequired(), NumberRange(min=1)])
-    bathrooms = IntegerField('Bathrooms', validators=[DataRequired(), NumberRange(min=1)])
+    bedrooms = IntegerField('Nos Bedrooms', validators=[DataRequired(), NumberRange(min=1)])
+    bathrooms = IntegerField('Nos Bathrooms', validators=[DataRequired(), NumberRange(min=1)])
     size = IntegerField('Size (sq ft)', validators=[DataRequired(), NumberRange(min=0)])
     available_from = DateField('Available From', format='%Y-%m-%d', validators=[DataRequired()])
     image1 = FileField('Image 1', validators=[FileAllowed(['jpg', 'png', 'jpeg'], 'Images only!')])
@@ -31,21 +31,21 @@ class PropertyForm(FlaskForm):
     submit = SubmitField('Create Property')
 
 class UpdatePropertyForm(FlaskForm):
-    """ The update property form
-
-    Args:
-        FlaskForm (_type_): Update property form to validate the property
-    """
     title = StringField('Title', validators=[DataRequired()])
-    description = StringField('Description', validators=[DataRequired()])
+    description = TextAreaField('Description', validators=[DataRequired()])
+    price = IntegerField('Price', validators=[DataRequired()])
     location = StringField('Location', validators=[DataRequired()])
-    price = StringField('Price', validators=[DataRequired()])
-    property_type = StringField('Property Type', validators=[DataRequired()])
-    property_status = StringField('Property Status', validators=[DataRequired()])
-    bathrooms = StringField('Bathrooms', validators=[DataRequired()])
-    bedrooms = StringField('Bedrooms', validators=[DataRequired()])
-    size = StringField('Size', validators=[DataRequired()])
-    submit = SubmitField('Update Property')
+    property_type = SelectField('Property Type', choices=[('House', 'House'), ('Apartment', 'Apartment'), ('Condo', 'Condo')], validators=[DataRequired()])
+    property_status = SelectField('Property Status', choices=[('For Sale', 'For Sale'), ('For Rent', 'For Rent')], validators=[DataRequired()])
+    bedrooms = IntegerField('Bedrooms', validators=[DataRequired()])
+    bathrooms = IntegerField('Bathrooms', validators=[DataRequired()])
+    size = IntegerField('Size (sqft)', validators=[DataRequired()])
+    # amenities = StringField('Amenities')
+    available_from = DateField('Available From', format='%Y-%m-%d')
+    thumbnail1 = FileField('Thumbnail 1')
+    thumbnail2 = FileField('Thumbnail 2')
+    thumbnail3 = FileField('Thumbnail 3')
+    submit = SubmitField('Update')
 
 
 class SearchForm(FlaskForm):
@@ -55,10 +55,10 @@ class SearchForm(FlaskForm):
         FlaskForm (_type_): _description_
     """
     location = StringField('Location', validators=[Optional()])
-    min_price = IntegerField('Min Price', validators=[Optional(), NumberRange(min=0)])
-    max_price = IntegerField('Max Price', validators=[Optional(), NumberRange(min=0)])
-    property_type = SelectField('Property Type', choices=[('', 'Any'), ('House', 'House'), ('Apartment', 'Apartment'), ('Condo', 'Condo')], validators=[Optional()])
-    property_status = SelectField('Property Status', choices=[('', 'Any'), ('For Sale', 'For Sale'), ('For Rent', 'For Rent')], validators=[Optional()])
+    min_price = IntegerField('Min Price $', validators=[Optional(), NumberRange(min=0)])
+    max_price = IntegerField('Max Price $', validators=[Optional(), NumberRange(min=0)])
+    property_type = SelectField('Property Type', choices=[('House', 'House'), ('Apartment', 'Apartment')], validators=[DataRequired()])
+    property_status = SelectField('Property Status', choices=[('For Sale', 'For Sale'), ('For Rent', 'For Rent')], validators=[DataRequired()])
     min_bedrooms = IntegerField('Min Bedrooms', validators=[Optional(), NumberRange(min=0)])
     min_bathrooms = IntegerField('Min Bathrooms', validators=[Optional(), NumberRange(min=0)])
     submit = SubmitField('Search')

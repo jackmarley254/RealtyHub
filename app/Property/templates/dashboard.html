@@ -1,0 +1,75 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Your Properties</h2>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for property in properties %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    {% if property.thumbnail1 %}
+                        <img src="{{ url_for('static', filename='property_pics/' + property.thumbnail1) }}" class="card-img-top" alt="{{ property.title }}">
+                    {% else %}
+                        <img src="{{ url_for('static', filename='property_pics/default.jpg') }}" class="card-img-top" alt="No Image Available">
+                    {% endif %}
+                    <div class="card-body">
+                        <h4 class="card-title"><strong>{{ property.title }}</strong></h4>
+                        <p class="card-text">{{ property.description[:100] }}...</p>
+                        <p class="card-text"><strong>Price:</strong> ${{ property.price }}</p>
+                        <ul class="list-inline mt-3">
+                            <li class="list-inline-item">
+                                <i class="fas fa-home"></i> {{ property.property_type }}
+                            </li>
+                            <li class="list-inline-item">
+                                <i class="fas fa-bed"></i> {{ property.bedrooms }} bd
+                            </li>
+                            <li class="list-inline-item">
+                                <i class="fas fa-bath"></i> {{ property.bathrooms }} ba
+                            </li>
+                            <li class="list-inline-item">
+                                <i class="fas fa-ruler-combined"></i> {{ property.size }} sqft
+                            </li>
+                        </ul>
+                        <a href="{{ url_for('proprety.update_property', property_id=property.id) }}" class="btn btn-primary">Update</a>
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" data-action="{{ url_for('proprety.delete_property', property_id=property.id) }}">Delete</button>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmDeleteModalLabel">Confirm Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this property?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form id="deleteForm" method="POST" action="">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript to handle modal form action -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var deleteModal = document.getElementById('confirmDeleteModal');
+    deleteModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget; // Button that triggered the modal
+        var actionUrl = button.getAttribute('data-action'); // Extract info from data-* attributes
+        var form = deleteModal.querySelector('#deleteForm');
+        form.action = actionUrl; // Update the form's action attribute
+    });
+});
+</script>
+{% endblock %}

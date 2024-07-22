@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>RealtyHub</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  </head>
+<body>
+{% include "nav.html" %}
+<header>
+  <nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container-fluid">
+      <!-- Logo aligned to the left -->
+      <a class="navbar-brand" href="{{ url_for('main.home') }}"><i class="fas fa-home"></i>RealtyHub</a>
+
+      <!-- Toggler button for mobile -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+        data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
+        aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Menu items aligned to the right -->
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
+        <ul class="navbar-nav">
+          <li class="nav-item dropdown">
+            <a class="nav-link text-white" href="#owners-investors" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false"><i class="fas fa-th-large"></i>Property</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="{{ url_for('proprety.create_property') }}"><i class="fas fa-th-large"></i> Create Property</a></li>
+              <li><a class="dropdown-item" href="{{ url_for('proprety.search_properties') }}"><i class="fas fa-th-large"></i> Search Property</a></li>
+              <li><a class="dropdown-item" href="{{ url_for('proprety.get_properties') }}"><i class="fas fa-th-large"></i> Show Properties</a></li>
+              <li><a class="dropdown-item" href="#"><i class="fas fa-th-large"></i> Owner FAQs</a></li>
+              <li><a class="dropdown-item" href="#"><i class="fas fa-th-large"></i> Free Rental Analysis</a></li>
+              <li><a class="dropdown-item" href="#"><i class="fas fa-th-large"></i> Property Management Agreement</a></li>
+              <li><a class="dropdown-item" href="#"><i class="fas fa-th-large"></i> Rental Investment Calculator</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link" href="#residents" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false"><i class="fas fa-users"></i>Residents</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#"><i class="fas fa-user"></i> Resident Benefits</a></li>
+              <li><a class="dropdown-item" href="#"><i class="fas fa-user"></i> Resident Resources</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link" href="#rentals" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false"><i class="fas fa-tasks"></i>For Rent</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#"><i class="fas fa-tasks"></i> Residential For Rent</a></li>
+              <li><a class="dropdown-item" href="#"><i class="fas fa-tasks"></i> Commercial For Rent</a></li>
+              <li><a class="dropdown-item" href="#"><i class="fas fa-dollar-sign"></i> Residential For Sale</a></li>
+              <li><a class="dropdown-item" href="#"><i class="fas fa-dollar-sign"></i> Commercial For Sale</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('messages.allmessages') }}" role="button" aria-expanded="false">
+                <i class="fas fa-message"> Messages</i>
+                {% if unread_count > 0 %}
+                    <span class="badge text-bg-danger">{{ unread_count }}</span>
+                {% endif %}
+            </a>
+        </li>
+        
+          <li class="nav-item dropdown">
+            <a class="nav-link" href="#about" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false"><i class="fas fa-info-circle">Contacts</i></a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#"><i class="fas fa-info-circle"></i> About Us/Meet The Team/Giving Back</a></li>
+              <li><a class="dropdown-item" href="#"><i class="fas fa-info-circle"></i> Agents Referrals</a></li>
+              <li><a class="dropdown-item" href="#"><i class="fas fa-info-circle"></i> Employment</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('main.accounts') }}" role="button" aria-expanded="false"><i class="fas fa-user">Profile</i></a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link" href="#contact" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false"><i class="fas fa-chart-line"></i>Dashboard</a>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="{{ url_for('proprety.my_properties') }}"><i class="fas fa-chart-line"></i>Agent's Dashboard</a></li>
+                <li><a class="dropdown-item" href="#"><i class="fas fa-chart-line"></i>Resident's Dashboard</a></li>
+            </ul>
+          </li>
+          {% if current_user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('main.logout') }}" role="button" aria-expanded="false"><i class="fas fa-user">Logout</i></a>
+          </li>
+          {% else %}
+          <li class="nav-item dropdown">
+            <a class="nav-link" href="#login" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false"><i class="fas fa-sign-in-alt"></i>Login</a>
+            <ul class="dropdown-menu">
+              <li class="spacing"><a class="dropdown-item" href="{{ url_for('tenant.login') }}"><i class="fas fa-sign-in-alt"></i> Resident Login</a></li>
+              <li class="spacing"><a class="dropdown-item" href="{{ url_for('owner.login') }}"><i class="fas fa-sign-in-alt"></i> Owner Login</a></li>
+            </ul>
+          </li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<main>
+    <div class="flash-messages">
+        {% with messages = get_flashed_messages(with_categories=true) %} {% if
+        messages %} {% for category, message in messages %}
+        <div
+          class="alert alert-{{ category }} alert-dismissible fade show"
+          role="alert">
+          {{ message }}
+        <button
+            type="button"
+            class="btn-close btn-sm"
+            data-bs-dismiss="alert"
+            aria-label="Close">
+        </button>
+        </div>
+        {% endfor %} {% endif %} {% endwith %}
+        </div>
+  <!-- Hero section -->
+<section id="home">
+  <div class="hero">
+    <div class="container text-center text-white">
+      <h1 class="hero-heading">Welcome to RealtyHub</h1>
+      <p>RealtyHub is a real estate platform that connects buyers, sellers, renters, and landlords. We provide a platform for real estate agents to list properties for sale or rent.</p>
+      <div class="row justify-content-center mt-4">
+        <div class="col-md-4 mb-4">
+          <a href="#" class="icon-container text-decoration-none">
+            <i class="fa-solid fa-money-bill-trend-up"></i>
+            <span>Owner Benefits</span>
+          </a>
+        </div>
+        <div class="col-md-4 mb-4">
+          <a href="{{ url_for('proprety.search_properties') }}" class="icon-container text-decoration-none">
+            <i class="fa-solid fa-magnifying-glass-dollar"></i>
+            <span>Search Rentals</span>
+          </a>
+        </div>
+        <div class="col-md-4 mb-4">
+          <a href="#" class="icon-container text-decoration-none">
+            <i class="fa-solid fa-upload"></i>
+            <span>Resident Benefits</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Welcome section -->
+<section id="welcome-section" class="py-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 mx-auto text-center">
+        <h2>Welcome to RealthyHub Property Management & Real Estate</h2>
+        <p class="lead">At RealthyHub Property Management, we are dedicated to providing exceptional property management services in Nigeria and Kenya.</p>
+      </div>
+    </div>
+    
+    <div class="row mt-5">
+      <div class="col-lg-6">
+        <h3>Why Choose Us?</h3>
+        <ul class="list-unstyled">
+          <li><i class="fas fa-check-circle text-primary"></i> Family-Owned Integrity</li>
+          <li><i class="fas fa-check-circle text-primary"></i> Professional Excellence</li>
+          <li><i class="fas fa-check-circle text-primary"></i> Community and Care</li>
+          <li><i class="fas fa-check-circle text-primary"></i> Trust and Satisfaction</li>
+          <li><i class="fas fa-check-circle text-primary"></i> Award-Winning Service</li>
+        </ul>
+      </div>
+      <div class="col-lg-6">
+        <h3>Our Services</h3>
+        <ul class="list-unstyled">
+          <li><i class="fas fa-check-circle text-primary"></i> Comprehensive Management</li>
+          <li><i class="fas fa-check-circle text-primary"></i> Transparent Fees</li>
+          <li><i class="fas fa-check-circle text-primary"></i> Legal Expertise</li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="row mt-5">
+      <div class="col-md-8 mx-auto text-center">
+        <p class="lead">Join us today to explore a stunning selection of homes for rent and sale. Discover the perfect property that suits your lifestyle and needs. Start your journey with RealtyHub and experience the ease of finding your beautiful new home.</p>
+        <a href="{{ url_for('tenant.register') }}" class="btn btn-primary btn-lg">Get Started</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- How we help you -->
+<section id="help">
+  <div class="container">
+    <h2 class="text-center mb-5">How We Help You As Your Denver Property Manager</h2>
+    <div class="row text-center">
+      <div class="col-md-4 mb-4">
+        <i class="fa fa-rocket fa-2x text-primary mb-3 d-block"></i>
+        <h5>Marketing</h5>
+        <p>Effective marketing is key to attracting high-quality applicants. We prepare a custom market analysis for each property we manage to determine the optimal rent to maximize your return on investment.</p>
+      </div>
+      <div class="col-md-4 mb-4">
+        <i class="fa fa-search-dollar fa-2x text-primary mb-3 d-block"></i>
+        <h5>Tenant Screening</h5>
+        <p>Our custom in-house screening combines personalized processing and advanced data search technology to keep the bad tenants out and attract long-term, high-quality residents.</p>
+      </div>
+      <div class="col-md-4 mb-4">
+        <i class="fa fa-file-signature fa-2x text-primary mb-3 d-block"></i>
+        <h5>Lease Execution & Renewals</h5>
+        <p>Our lease agreement is reviewed and approved by TS, a top Colorado landlord law firm. We operate in full compliance with fair housing, Colorado habitability, application screening, and right-to-cure laws.</p>
+      </div>
+      <div class="col-md-4 mb-4">
+        <i class="fa fa-wrench fa-2x text-primary mb-3 d-block"></i>
+        <h5>Maintenance</h5>
+        <p>Our 24/7 Repair Center is always open to protect your property around the clock. We have low, normal, and urgent protocols to ensure cost control and pre-screen all of our vendors.</p>
+      </div>
+      <div class="col-md-4 mb-4">
+        <i class="fa fa-chart-line fa-2x text-primary mb-3 d-block"></i>
+        <h5>Financial Reporting</h5>
+        <p>With our detailed financial reporting tools and secure online owner portal, you will have 24/7 online access to your financial information.</p>
+      </div>
+      <div class="col-md-4 mb-4">
+        <i class="fa fa-dog fa-2x text-primary mb-3 d-block"></i>
+        <h5>Eviction & Pet Protection</h5>
+        <p>If a legal eviction becomes necessary, WE will pay YOUR legal fees. If a pet does damage to your property, WE will pay for that too!</p>
+      </div>
+      <div class="col-md-4 mb-4">
+        <i class="fa fa-coins fa-2x text-primary mb-3 d-block"></i>
+        <h5>Rent Collection</h5>
+        <p>We believe that if you do not get paid, then we should not get paid either. We work to ensure you get paid on time, every time.</p>
+      </div>
+      <div class="col-md-4 mb-4">
+        <i class="fa fa-hand-holding-usd fa-2x text-primary mb-3 d-block"></i>
+        <h5>Getting Your Property Rent Ready</h5>
+        <p>We will handle the entire make-ready process on your behalf to ensure your property attracts high-quality residents and rents quickly.</p>
+      </div>
+    </div>
+  </div>
+</section>
+     
+<!-- Our Services-->
+<section id="Services" class="py-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8 mx-auto text-center">
+          <h2>Our Property Management</h2>
+          <p class="lead">When you partner with a property management company you are literally handling them the keys to the front door of your real estat - BE CAUTIOUS!</p>
+        </div>
+      </div>
+
+      <div class="row mt-5">
+        <div class="col-lg-6">
+          <h3>Why Choose Us?</h3>
+          <p>We are committed to providing our residents with prompt, professional, and courteous service. We believe in personalized service and attention to detail.</p>
+        </div>
+        <div class="col-lg-6">
+          <h3>Services We Offer</h3>
+          <ul>
+            <li>Property management services</li>
+            <li>Lease management</li>
+            <li>Rental market analysis</li>
+            <li>Property maintenance</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+</section>
+<!-- Featured Properties -->
+<section id="featured-properties" class="py-5">
+    <div class="container">
+        <h2 class="text-center">Featured Properties</h2>
+        <div class="row mt-4">
+            {% for property in recent_properties %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    {% if property.thumbnail1 %}
+                        <img src="{{ url_for('static', filename='property_pics/' + property.thumbnail1) }}" class="card-img-top" alt="{{ property.title }}">
+                    {% else %}
+                        <img src="{{ url_for('static', filename='property_pics/default.jpg') }}" class="card-img-top" alt="No Image Available">
+                    {% endif %}
+                    <div class="card-body">
+                        <h4 class="card-title"><strong>{{ property.title }}</strong></h4>
+                        <p class="card-text"><strong>{{ property.property_status }}</strong></p>
+                        <p class="card-text">{{ property.description[:100] }}...</p>
+                        <p class="card-text"><strong>Price:</strong> ${{ property.price }}</p>
+                    <ul class="list-inline mt-3">
+                        <li class="list-inline-item">
+                            <i class="fas fa-home"></i> {{ property.property_type }}
+                        </li>
+                        <li class="list-inline-item">
+                            <i class="fas fa-bed"></i> {{ property.bedrooms }} bd
+                        </li>
+                        <li class="list-inline-item">
+                            <i class="fas fa-bath"></i> {{ property.bathrooms }} ba
+                        </li>
+                        <li class="list-inline-item">
+                            <i class="fas fa-ruler-combined"></i> {{ property.size }} sqft
+                        </li>
+                    </ul>
+                        <a href="{{ url_for('proprety.view_property', property_id=property.id) }}" class="btn btn-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+
+<!-- Contact Us -->
+<section id="contact" class="py-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 mx-auto text-center">
+        <h2>Contact Us</h2>
+        <p class="lead">Have a question or want to learn more about our services? Contact us today!</p>
+        <a href="#" class="btn btn-primary btn-lg">Contact Us</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer id="footer" class="bg-dark text-white py-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4">
+        <h5>RealtyHub</h5>
+        <p>Connect with us for all your real estate needs.</p>
+        <ul class="list-unstyled social-icons">
+          <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+          <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+          <li><a href="#"><i class="fab fa-instagram"></i></a></li>
+        </ul>
+      </div>
+      <div class="col-md-4">
+        <h5>Links</h5>
+        <ul class="list-unstyled">
+          <li><a href="#">Home</a></li>
+          <li><a href="#">Owners/Investors</a></li>
+          <li><a href="#">Residents</a></li>
+          <li><a href="#">Rentals</a></li>
+          <li><a href="#">Resources</a></li>
+          <li><a href="#">About</a></li>
+          <li><a href="#">For Sale</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">Login</a></li>
+        </ul>
+      </div>
+      <div class="col-md-4">
+        <h5>Contact</h5>
+        <p>123 Realty Lane ikeja<br>lagos, Nigeria<br>info@realtyhub.com<br>555-123-4567</p>
+      </div>
+    </div>
+  </div>
+</footer>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<!-- In your main template file or a separate JS file included in the base template -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.min.js"></script>
+<script>
+    var socket = io();
+
+    socket.on('receive_message', function(msg) {
+        // Increment the unread message count
+        var unreadCountBadge = document.querySelector('.nav-item .badge');
+        var unreadCount = parseInt(unreadCountBadge.textContent) || 0;
+        unreadCount += 1;
+        unreadCountBadge.textContent = unreadCount;
+        unreadCountBadge.style.display = 'inline';
+    });
+</script>
+
+  </body>
+</html>

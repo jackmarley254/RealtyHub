@@ -1,0 +1,191 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Update Property</h2>
+    <form method="POST" action="{{ url_for('proprety.update_property', property_id=prop.id) }}" class="row g-3" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <div class="form-group col-md-6">
+            {{ form.title.label(class="form-control-label") }}
+            {% if form.title.errors %}
+                {{ form.title(class="form-control is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.title.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.title(class="form-control") }}
+            {% endif %}
+        </div>
+        <div class="form-group col-md-12 mt-3">
+            {{ form.description.label(class="form-control-label") }}
+            {% if form.description.errors %}
+                {{ form.description(class="form-control is-invalid", rows="5") }}
+                <div class="invalid-feedback">
+                    {% for error in form.description.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.description(class="form-control", rows="5") }}
+            {% endif %}
+        </div>
+        <div class="form-group col-md-4 mt-3">
+            {{ form.price.label(class="form-control-label") }}
+            {% if form.price.errors %}
+                {{ form.price(class="form-control is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.price.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.price(class="form-control") }}
+            {% endif %}
+        </div>
+        <div class="form-group col-md-4 mt-3">
+            {{ form.location.label(class="form-control-label") }}
+            {% if form.location.errors %}
+                {{ form.location(class="form-control is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.location.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.location(class="form-control") }}
+            {% endif %}
+        </div>
+        <div class="form-group col-md-4 mt-3">
+            {{ form.property_type.label(class="form-control-label") }}
+            {% if form.property_type.errors %}
+                {{ form.property_type(class="form-control is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.property_type.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.property_type(class="form-control") }}
+            {% endif %}
+        </div>
+        <div class="form-group col-md-4 mt-3">
+            {{ form.property_status.label(class="form-control-label") }}
+            {% if form.property_status.errors %}
+                {{ form.property_status(class="form-control is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.property_status.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.property_status(class="form-control") }}
+            {% endif %}
+        </div>
+        <div class="form-group col-md-4 mt-3">
+            {{ form.bedrooms.label(class="form-control-label") }}
+            {% if form.bedrooms.errors %}
+                {{ form.bedrooms(class="form-control is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.bedrooms.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.bedrooms(class="form-control") }}
+            {% endif %}
+        </div>
+        <div class="form-group col-md-4 mt-3">
+            {{ form.bathrooms.label(class="form-control-label") }}
+            {% if form.bathrooms.errors %}
+                {{ form.bathrooms(class="form-control is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.bathrooms.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.bathrooms(class="form-control") }}
+            {% endif %}
+        </div>
+        <div class="form-group col-md-4 mt-3">
+            {{ form.size.label(class="form-control-label") }}
+            {% if form.size.errors %}
+                {{ form.size(class="form-control is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.size.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.size(class="form-control") }}
+            {% endif %}
+        </div>
+        <div class="form-group col-md-6 mt-3">
+            {{ form.available_from.label(class="form-control-label") }}
+            {% if form.available_from.errors %}
+                {{ form.available_from(class="form-control is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.available_from.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.available_from(class="form-control") }}
+            {% endif %}
+        </div>
+        <div class="form-group col-md-4 mt-3">
+            {{ form.thumbnail1.label(class="form-control-label") }}
+            {% if form.thumbnail1.errors %}
+                {{ form.thumbnail1(class="form-control is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.thumbnail1.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.thumbnail1(class="form-control") }}
+            {% endif %}
+            {% if prop.thumbnail1 %}
+                <img src="{{ url_for('static', filename='property_pics/' + prop.thumbnail1) }}" alt="Thumbnail 1" class="img-thumbnail mt-2">
+            {% endif %}
+        </div>
+        <div class="form-group col-md-4 mt-3">
+            {{ form.thumbnail2.label(class="form-control-label") }}
+            {% if form.thumbnail2.errors %}
+                {{ form.thumbnail2(class="form-control is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.thumbnail2.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.thumbnail2(class="form-control") }}
+            {% endif %}
+            {% if prop.thumbnail2 %}
+                <img src="{{ url_for('static', filename='property_pics/' + prop.thumbnail2) }}" alt="Thumbnail 2" class="img-thumbnail mt-2">
+            {% endif %}
+        </div>
+        <div class="form-group col-md-4 mt-3">
+            {{ form.thumbnail3.label(class="form-control-label") }}
+            {% if form.thumbnail3.errors %}
+                {{ form.thumbnail3(class="form-control is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.thumbnail3.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.thumbnail3(class="form-control") }}
+            {% endif %}
+            {% if prop.thumbnail3 %}
+                <img src="{{ url_for('static', filename='property_pics/' + prop.thumbnail3) }}" alt="Thumbnail 3" class="img-thumbnail mt-2">
+            {% endif %}
+        </div>
+        <div class="form-group mt-3">
+            {{ form.submit(class="btn btn-primary") }}
+        </div>
+    </form>
+</div>
+{% endblock %}
