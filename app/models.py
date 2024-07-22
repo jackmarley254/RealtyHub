@@ -124,7 +124,8 @@ class Property(Base):
     location = Column(String(200), nullable=False)
     price = Column(Integer, nullable=False)
     property_type = Column(String(200), nullable=False)
-    property_status = Mapped[PropertyStatus]
+    # property_status = Mapped[PropertyStatus]
+    property_status = Column(String(200), nullable=False)
     bathrooms = Column(Integer, nullable=False)
     bedrooms = Column(Integer, nullable=False)
     size = Column(Integer, nullable=False)
@@ -132,9 +133,12 @@ class Property(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
     owner_id = Column(Integer, ForeignKey('owners.id'))
     rental = relationship('Rental', backref='properties', lazy=True)
-    image1 = Column(String(20), nullable=True)
-    image2 = Column(String(20), nullable=True)
-    image3 = Column(String(20), nullable=True)
+    image1 = Column(String(100), nullable=True)
+    thumbnail1 = Column(String(100), nullable=True)
+    image2 = Column(String(100), nullable=True)
+    thumbnail2 = Column(String(100), nullable=True)
+    image3 = Column(String(100), nullable=True)
+    thumbnail3 = Column(String(100), nullable=True)
     
     def __repr__(self):
         return f"Property('{self.title}', '{self.description}', '{self.location}', '{self.price}', '{self.property_type}', '{self.property_status}', '{self.bathrooms}', '{self.bedrooms}', '{self.size}')"    
@@ -150,7 +154,8 @@ class Messages(Base, UserMixin):
     """Message model
 
     Args:
-            Base (_type_): _description_
+        db.Model (SQLAlchemy): SQLAlchemy base class
+        UserMixin (Flask-Login): Flask-Login mixin class
     """
     __tablename__ = 'messages'
     id = Column(Integer, primary_key=True)
@@ -158,10 +163,11 @@ class Messages(Base, UserMixin):
     receiver_id = Column(Integer, ForeignKey('users.id'))
     message = Column(Text, nullable=False)
     timestamp = Column(DateTime, default=datetime.utcnow)
+    read = Column(Boolean, default=False)  # New field to track if the message is read or unread
     sender = relationship('Users', foreign_keys=[sender_id])
     receiver = relationship('Users', foreign_keys=[receiver_id])
-        
-    
+    property_id = Column(Integer, ForeignKey('properties.id'))
+    property_re = relationship('Property', backref='messages')
     
     def __repr__(self):
         return f"Messages('{self.sender_id}', '{self.receiver_id}', '{self.property_id}', '{self.message}')"

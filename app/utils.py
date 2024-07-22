@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """ we will use here for urls for the homepage"""
 from flask import render_template, url_for, flash, redirect, request, Blueprint
-from app.models import Tenant, Property, Owner
+from app.models import Tenant, Property, Owner, Messages
 from flask_login import current_user, logout_user, login_required
 
 # Declare the blueprints
@@ -10,8 +10,15 @@ main = Blueprint('main', __name__, url_prefix="/home", template_folder='template
 
 @main.route('/', methods=['GET', 'POST'], strict_slashes=False)
 def home():
-    """ homepage """
-    return render_template('home.html')
+    """Homepage"""
+    unread_count = 0
+    if current_user.is_authenticated:
+        unread_count = Messages.query.filter_by(receiver_id=current_user.id, read=False).count()
+    
+    recent_properties = Property.query.order_by(Property.created_at.desc()).limit(6).all()
+    
+    return render_template('home.html', unread_count=unread_count, recent_properties=recent_properties)
+
 
 @main.route('/logout')
 @login_required
@@ -34,5 +41,5 @@ def accounts():
         return redirect(url_for('tenant.accounts'))
     # Handle unexpected user types
     else:
-        flash('Unexpected user type!', 'warning')
+        flash('No Signed in Account! Pls sign in first', 'warning')
         return redirect(url_for('main.home'))

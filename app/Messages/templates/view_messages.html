@@ -1,0 +1,91 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container d-flex justify-content-center">
+    <div>
+        <h2>Property Details</h2>
+        <div class="property-details card mb-7">
+            <div class="card-body">
+                <p><strong>From:</strong> {{ sender.username }}</p>
+                <p><strong>Email:</strong> {{ sender.email }}</p>   
+                <p><strong>Location:</strong> {{ sender.location }}</p>
+                <p><strong>Property:</strong> {{ property_details.title }}</p>
+            </div>
+        </div>
+
+        <div class="conversation mb-4">
+            {% for m in conversation %}
+                <div class="message {% if m.sender_id == current_user.id %}sent{% else %}received{% endif %}">
+                    <div class="card">
+                        <div class="card-body">
+                            <p class="card-text">{{ m.message }}</p>
+                            <small class="text-muted">{{ m.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</small>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="reply-form mt-4">
+            <h3>Reply</h3>
+            <form method="POST" action="{{ url_for('messages.view_message', message_id=message.id) }}">
+                {{ reply_form.hidden_tag() }}
+                <div class="form-group">
+                    {{ reply_form.message.label }}
+                    {{ reply_form.message(size=20, class="form-control") }}
+                </div>
+                <button type="submit" class="btn btn-primary">Send Reply</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .property-details {
+        margin-bottom: 20px;
+    }
+
+    .conversation {
+        margin-bottom: 20px;
+    }
+
+    .message {
+        display: flex;
+        justify-content: flex-start;
+        margin-bottom: 10px;
+    }
+
+    .message.sent {
+        justify-content: flex-end;
+    }
+
+    .card {
+        border: none;
+        max-width: 70%; /* Limit the width of the card */
+    }
+
+    .card-body {
+        padding: 15px;
+        border-radius: 12px;
+        display: inline-block;
+        background-color: #f8f9fa;
+    }
+
+    .message.sent .card-body {
+        background-color: #d4edda; /* Light green */
+        text-align: right;
+    }
+
+    .message.received .card-body {
+        background-color: #f8d7da; /* Light red */
+        text-align: left;
+    }
+
+    .card-text {
+        margin: 0;
+    }
+
+    .reply-form {
+        margin-top: 20px;
+    }
+</style>
+{% endblock %}

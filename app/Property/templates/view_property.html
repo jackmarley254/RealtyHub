@@ -1,33 +1,53 @@
 {% extends "layout.html" %}
 {% block content %}
 <div class="container mt-5">
-    <h2>Properties</h2>
-    <div class="row row-cols-1 row-cols-md-3 g-4">
-        {% for property in properties %}
-        <div class="col">
-            <div class="card h-100">
-                {% if property.image1 %}
-                <a href="{{ url_for('proprety.view_property', property_id=property.id) }}">
-                    <img src="{{ url_for('static', filename='property_pics/' + property.image1) }}" class="card-img-top" alt="...">
-                </a>
-                {% else %}
-                <a href="{{ url_for('proprety.view_property', property_id=property.id) }}">
-                    <img src="{{ url_for('static', filename='property_pics/default.jpg') }}" class="card-img-top" alt="No Image Available">
-                </a>
-                {% endif %}
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div id="propertyCarousel" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+                        {% if property.image1 %}
+                            <div class="carousel-item active">
+                                <img src="{{ url_for('static', filename='property_pics/' + property.image1) }}" class="d-block w-100" alt="Image 1">
+                            </div>
+                        {% endif %}
+                        {% if property.image2 %}
+                            <div class="carousel-item {% if not property.image1 %}active{% endif %}">
+                                <img src="{{ url_for('static', filename='property_pics/' + property.image2) }}" class="d-block w-100" alt="Image 2">
+                            </div>
+                        {% endif %}
+                        {% if property.image3 %}
+                            <div class="carousel-item {% if not property.image1 and not property.image2 %}active{% endif %}">
+                                <img src="{{ url_for('static', filename='property_pics/' + property.image3) }}" class="d-block w-100" alt="Image 3">
+                            </div>
+                        {% endif %}
+                        <!-- more images similarly if needed -->
+                    </div>
+                    <a class="carousel-control-prev" href="#propertyCarousel" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#propertyCarousel" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>  
+            </br>              
                 <div class="card-body">
-                    <h5 class="card-title">{{ property.title }}</h5>
+                    <h4 class="card-title"><strong>{{ property.title }}</strong></h4>
+                </br>
                     <p class="card-text">{{ property.description }}</p>
                     <p class="card-text"><strong>Price:</strong> ${{ property.price }}</p>
+                    <p class="card-text"><strong>Location: {{ property.location }}</strong></p>
                     <ul class="list-inline mt-3">
                         <li class="list-inline-item">
                             <i class="fas fa-home"></i> {{ property.property_type }}
                         </li>
                         <li class="list-inline-item">
-                            <i class="fas fa-bed"></i> {{ property.bedrooms }} bd
+                            <i class="fas fa-bed"></i> {{ property.bedrooms }} Bedrooms
                         </li>
                         <li class="list-inline-item">
-                            <i class="fas fa-bath"></i> {{ property.bathrooms }} ba
+                            <i class="fas fa-bath"></i> {{ property.bathrooms }} Bathrooms
                         </li>
                         <li class="list-inline-item">
                             <i class="fas fa-ruler-combined"></i> {{ property.size }} sqft
@@ -36,24 +56,117 @@
                 </div>
             </div>
         </div>
-        {% endfor %}
-    </div>
-    <div class="d-flex justify-content-center mt-4">
-        <nav aria-label="Page navigation example">
-            <ul class="pagination">
-                <li class="page-item {% if not pagination.has_prev %}disabled{% endif %}">
-                    <a class="page-link" href="{{ url_for('proprety.get_properties', page=pagination.prev_num) }}">Previous</a>
-                </li>
-                {% for page_num in pagination.iter_pages() %}
-                    <li class="page-item {% if pagination.page == page_num %}active{% endif %}">
-                        <a class="page-link" href="{{ url_for('proprety.get_properties', page=page_num) }}">{{ page_num }}</a>
-                    </li>
-                {% endfor %}
-                <li class="page-item {% if not pagination.has_next %}disabled{% endif %}">
-                    <a class="page-link" href="{{ url_for('proprety.get_properties', page=pagination.next_num) }}">Next</a>
-                </li>
-            </ul>
-        </nav>
+        <div class="col-md-4">
+            <h3>Share</h3>
+            <p>
+                <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.url }}" target="_blank">Facebook</a> |
+                <a href="https://twitter.com/intent/tweet?url={{ request.url }}" target="_blank">Twitter</a> |
+                <a href="https://pinterest.com/pin/create/button/?url={{ request.url }}" target="_blank">Pinterest</a>
+            </p>
+            <h3>Contact Agent</h3>
+            <form id="contact-form" class="mt-5">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" class="form-control" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone</label>
+                    <input type="text" class="form-control" id="phone" name="phone">
+                </div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
+                </div>
+                <div class="form-group form-check">
+                    <input type="checkbox" class="form-check-input" id="interested" name="interested">
+                    <label class="form-check-label" for="interested">I am interested in this property.</label>
+                </div>
+                <button type="submit" class="btn btn-primary mt-3 row-cols-7 d-flex justify-content-center">Submit</button>
+            </form>
+        </div>        
     </div>
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
+
+    document.getElementById("contact-form").addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        var senderId = {{ current_user.id }};
+        var receiverId = {{ property.owner_id }};
+        var propertyId = {{ property.id }};
+        var name = document.getElementById("name").value;
+        var email = document.getElementById("email").value;
+        var phone = document.getElementById("phone").value;
+        var messageContent = document.getElementById("message").value;
+        var interested = document.getElementById("interested").checked;
+
+        var data = {
+            sender_id: senderId,
+            receiver_id: receiverId,
+            property_id: propertyId,
+            name: name,
+            email: email,
+            phone: phone,
+            content: messageContent,
+            interested: interested
+        };
+
+        socket.emit('send_message', data);
+
+        // Handle authentication error
+        socket.on('authentication_error', function(data) {
+            alert(data.message); // Display the error message
+           
+        });
+
+        // Handle message reception
+        socket.on('receive_message', function(data) {
+            console.log('Message received:', data);
+
+            // Create a new message element
+            var newMessageDiv = document.createElement("div");
+            newMessageDiv.classList.add("message");
+            if (data.sender_id === {{ current_user.id }}) {
+                newMessageDiv.classList.add("sent");
+            } else {
+                newMessageDiv.classList.add("received");
+            }
+
+            var cardDiv = document.createElement("div");
+            cardDiv.classList.add("card");
+
+            var cardBodyDiv = document.createElement("div");
+            cardBodyDiv.classList.add("card-body");
+
+            var messageTextP = document.createElement("p");
+            messageTextP.classList.add("card-text");
+            messageTextP.innerText = data.content;
+
+            var timestampSmall = document.createElement("small");
+            timestampSmall.classList.add("text-muted");
+            timestampSmall.innerText = data.timestamp;
+
+            cardBodyDiv.appendChild(messageTextP);
+            cardBodyDiv.appendChild(timestampSmall);
+            cardDiv.appendChild(cardBodyDiv);
+            newMessageDiv.appendChild(cardDiv);
+
+            document.querySelector(".conversation").appendChild(newMessageDiv);
+        });
+
+        // Reset form after submission
+        document.getElementById("contact-form").reset();
+    });
+});
+</script>
+
+
 {% endblock %}
