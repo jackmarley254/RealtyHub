@@ -1,0 +1,70 @@
+{% extends "layout.html" %}
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+<div class="container d-flex justify-content-center">
+    <nav class="dashboard">
+        <ul>
+            <li><a href="{{ url_for('messages.allmessages') }}">
+                <i class="fas fa-envelope"></i>
+                <span class="nav-item">Messages</span>
+                {% if unread_count > 0 %}
+                    <span class="badge">{{ unread_count }}</span>
+                {% endif %}
+            </a></li>
+            <!-- Other menu items -->
+        </ul>
+    </nav>
+</div>
+
+<div class="container d-flex justify-content-center">
+    <div class="messages-list">
+        <h2>Messages</h2>
+        <ul id="receivedMessages" class="list-unstyled">
+            {% if received_messages %}
+                {% for message in received_messages %}
+                    <li class="card mb-3 {% if not message.read %}bg-light{% endif %}" id="message-{{ message.id }}">
+                        <a href="{{ url_for('messages.view_message', message_id=message.id) }}" class="text-dark text-decoration-none">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ message.sender.username }} - {{ message.property_re.title }}</h5>
+                                <p class="card-text">{{ message.message[:30] }}...</p>
+                                {% if not message.read %}
+                                    <span class="badge bg-success">New</span>
+                                {% endif %}
+                            </div>
+                        </a>
+                    </li>
+                {% endfor %}
+            {% else %}
+                <li><em>No messages yet</em></li>
+            {% endif %}
+        </ul>
+    </div>
+</div>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.min.js"></script>
+<script>
+    var socket = io();
+
+    socket.on('receive_message', function(msg) {
+        var receivedMessages = document.getElementById('receivedMessages');
+        var newMessage = document.createElement('li');
+        newMessage.classList.add('card', 'mb-3', 'bg-light');
+        newMessage.id = 'message-' + msg.message_id;
+        newMessage.innerHTML = `<a href="/messages/${msg.message_id}" class="text-dark text-decoration-none">
+                                    <div class="card-body">
+                                        <h5 class="card-title">${msg.sender} - ${msg.property_title}</h5>
+                                        <p class="card-text">${msg.content.slice(0, 30)}...</p>
+                                        <span class="badge bg-success">New</span>
+                                    </div>
+                                </a>`;
+        receivedMessages.appendChild(newMessage);
+
+        var unreadCountBadge = document.querySelector('.nav-item .badge');
+        var unreadCount = parseInt(unreadCountBadge.textContent) || 0;
+        unreadCount += 1;
+        unreadCountBadge.textContent = unreadCount;
+        unreadCountBadge.style.display = 'inline';
+    });
+</script>
+{% endblock %}
