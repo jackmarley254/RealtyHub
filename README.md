@@ -1,6 +1,5 @@
 # Real Estate Web Application 
 
-
 ### This README file provides a comprehensive guide to your real estate web application, covering the introduction, features, database models, API endpoints, frontend implementation, authentication and authorization, and authors.
 
 ## Table of Contents
@@ -14,6 +13,7 @@
 
 ## Introduction
 This real estate web application allows users to buy, sell, rent, and post properties. Built using React.js for the frontend, Flask for the backend, and MySQL for the database, it supports user registration, authentication, and features like property search, messaging, and property management.
+
 
 ## Features
 - User Registration and Authentication
@@ -105,4 +105,4 @@ class User(db.Model):
 - George Nwabia [https://github.com/Georgen21]
 - Godswill Chimnonso [https://github.com/Tnkma]
 - Jackson Ndiritu [https://github.com/jackmarley254]
-- Janefrancis [https://github.com/Janecanal]
+- Janefrances Chukwunecheobi[https://github.com/Janecanal]
