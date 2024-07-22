@@ -23,84 +23,103 @@ This real estate web application allows users to buy, sell, rent, and post prope
 - User Dashboard
 - Email Notifications
 - Mobile Responsiveness
+## Technologies Used
+Frontend:
+Jinja for templating
+Bootstrap 5 for styling
+CSS
+JavaScript for interactivity
+Backend:
+Flask
+Python
+Database:
+MySQL
+Other Tools:
+Git for version control
+SQLAlchemy for ORM
+Flask-Login for authentication
+## Installation
+Prerequisites
+Python 3.x
+Node.js and npm
+MySQL
+** Backend Setup
+* Clone the repository:
+git clone https://github.com/your-username/RealtyHub.git
+cd RealtyHub
+* Set up a virtual environment:
+python3 -m venv venv
+source venv/bin/activate
+Install the dependencies:
+pip install -r requirements.txt
+* Configure the database in config.py.
+Run the migrations
+flask db upgrade
+Start the Flask server:
+flask run
 
-## Database Models
-### User Model
-```python
-from your_application import db
+## Install the dependencies:
+- npm install
+- Start the React development server:
+- npm start
+- Usage
+Access the web application at http://localhost:3000.
+Register a new user or log in with existing credentials.
+Explore properties, manage listings, and communicate with other users.
+Project Structure
+```arduino
 
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    password_hash = db.Column(db.String(128), nullable=False)
-    properties = db.relationship('Property', backref='owner', lazy=True)
-    sent_messages = db.relationship('Message', foreign_keys='Message.sender_id', backref='sender', lazy=True)
-    received_messages = db.relationship('Message', foreign_keys='Message.receiver_id', backref='receiver', lazy=True)
-
-
-    * Property Model
-
-    class Property(db.Model):
-        id = db.Column(db.Integer, primary_key=True)
-        title = db.Column(db.String(200), nullable=False)
-        description = db.Column(db.Text, nullable=False)
-        price = db.Column(db.Float, nullable=False)
-        location = db.Column(db.String(200), nullable=False)
-        property_type = db.Column(db.String(50), nullable=False)
-        bedrooms = db.Column(db.Integer)
-        bathrooms = db.Column(db.Integer)
-        owner_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-        size = db.Column(db.Float)
-        amenities = db.Column(db.String(200))
-        available_from = db.Column(db.Date)
-        status = db.Column(db.String(50), default='available')
-        photos = db.relationship('Photo', backref='property', lazy=True)
-        messages = db.relationship('Message', backref='property', lazy=True)
+RealtyHub/
+│
+├── app/
+│   ├── __init__.py
+│   ├── models.py
+│   ├── routes/
+│   │   ├── __init__.py
+│   │   ├── auth.py
+│   │   ├── properties.py
+│   │   ├── messages.py
+│   ├── utils.py
+│
+├── migrations/
+├── config.py
+├── run.py
+├── requirements.txt
+│
+├── real_estate_frontend/
+│   ├── public/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── App.js
+│   │   ├── index.js
+│   ├── package.json
 ```
+## API Endpoints
+Authentication Endpoints
+Register: POST /api/register
+Login: POST /api/login
+Property Endpoints
+Create Property: POST /api/properties
+Get Properties: GET /api/properties
+Get Property by ID: GET /api/properties/<property_id>
+Message Endpoints
+Send Message: POST /api/messages
+Get Messages: GET /api/messages
+## Contributing
+We welcome contributions from the community. Here’s how you can contribute:
 
-### Photo Model
-```python
-    class Photo(db.Model):
-        id = db.Column(db.Integer, primary_key=True)
-        url = db.Column(db.String(200), nullable=False)
-        property_id = db.Column(db.Integer, db.ForeignKey('property.id'), nullable=False)
-```
+Fork the repository.
+Create a new branch:
 
-### Message Model
-```python
-    from datetime import datetime
+git checkout -b feature/your-feature-name
+Make your changes and commit them:
 
-    class Message(db.Model):
-        id = db.Column(db.Integer, primary_key=True)
-        sender_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-        receiver_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-        property_id = db.Column(db.Integer, db.ForeignKey('property.id'), nullable=False)
-        content = db.Column(db.Text, nullable=False)
-        timestamp = db.Column(db.DateTime, default=datetime.utcnow)
-```
+git commit -m "Add some feature"
+Push to the branch:
 
-## Authentication Endpoints
-```python   
-    * Register
-    POST /api/register
-
-    Request:
-    {
-        "username": "example",
-        "email": "example@example.com",
-        "password": "password123"
-    }
-
-    * Login
-            POST /api/login
-
-            Request:
-            {
-                "email": "example@example.com",
-                "password": "password123"
-            }
-```
+git push origin feature/your-feature-name
+Open a pull request.
 ## Authors
 - George Nwabia [https://github.com/Georgen21]
 - Godswill Chimnonso [https://github.com/Tnkma]
