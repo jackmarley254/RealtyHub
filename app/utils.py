@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 #!/usr/bin/python3
 """ we will use here for urls for the homepage"""
 from flask import render_template, url_for, flash, redirect, request, Blueprint
@@ -43,3 +45,8 @@ def accounts():
     else:
         flash('No Signed in Account! Pls sign in first', 'warning')
         return redirect(url_for('main.home'))
+<<<<<<< HEAD
+>>>>>>> 8ed179db4ccce604927cf581f887b2c4630d868a
+=======
+>>>>>>> origin/main
+>>>>>>> 147b6bacaaf3b300b443e7ec10095c592b97d748
