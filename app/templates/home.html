@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+{% extends "layout.html" %}
+
+{% block content %}
+=======
 <!doctype html>
 <html lang="en">
   <head>
@@ -8,12 +13,17 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   </head>
 <body>
+>>>>>>> 8ed179db4ccce604927cf581f887b2c4630d868a
 {% include "nav.html" %}
 <header>
   <nav class="navbar navbar-expand-lg navbar-light">
     <div class="container-fluid">
       <!-- Logo aligned to the left -->
+<<<<<<< HEAD
+      <a class="navbar-brand" href="#"><i class="fas fa-home"></i>RealtyHub</a>
+=======
       <a class="navbar-brand" href="{{ url_for('main.home') }}"><i class="fas fa-home"></i>RealtyHub</a>
+>>>>>>> 8ed179db4ccce604927cf581f887b2c4630d868a
 
       <!-- Toggler button for mobile -->
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -25,6 +35,15 @@
       <!-- Menu items aligned to the right -->
       <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
         <ul class="navbar-nav">
+<<<<<<< HEAD
+          <li class="nav-item dropdown spacing">
+            <a class="nav-link" href="#owners-investors" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false"><i class="fas fa-th-large fa-2x"></i></a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#"><i class="fas fa-th-large"></i> Property Management</a></li>
+              <li><a class="dropdown-item" href="#"><i class="fas fa-th-large"></i> Pricing</a></li>
+              <li><a class="dropdown-item" href="#"><i class="fas fa-th-large"></i> Owner Guarantees</a></li>
+=======
           <li class="nav-item dropdown">
             <a class="nav-link text-white" href="#owners-investors" role="button" data-bs-toggle="dropdown"
               aria-expanded="false"><i class="fas fa-th-large"></i>Property</a>
@@ -32,20 +51,51 @@
               <li><a class="dropdown-item" href="{{ url_for('proprety.create_property') }}"><i class="fas fa-th-large"></i> Create Property</a></li>
               <li><a class="dropdown-item" href="{{ url_for('proprety.search_properties') }}"><i class="fas fa-th-large"></i> Search Property</a></li>
               <li><a class="dropdown-item" href="{{ url_for('proprety.get_properties') }}"><i class="fas fa-th-large"></i> Show Properties</a></li>
+>>>>>>> 8ed179db4ccce604927cf581f887b2c4630d868a
               <li><a class="dropdown-item" href="#"><i class="fas fa-th-large"></i> Owner FAQs</a></li>
               <li><a class="dropdown-item" href="#"><i class="fas fa-th-large"></i> Free Rental Analysis</a></li>
               <li><a class="dropdown-item" href="#"><i class="fas fa-th-large"></i> Property Management Agreement</a></li>
               <li><a class="dropdown-item" href="#"><i class="fas fa-th-large"></i> Rental Investment Calculator</a></li>
             </ul>
           </li>
+<<<<<<< HEAD
+          <li class="nav-item dropdown spacing">
+            <a class="nav-link" href="#residents" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false"><i class="fas fa-users fa-2x"></i></a>
+=======
           <li class="nav-item dropdown">
             <a class="nav-link" href="#residents" role="button" data-bs-toggle="dropdown"
               aria-expanded="false"><i class="fas fa-users"></i>Residents</a>
+>>>>>>> 8ed179db4ccce604927cf581f887b2c4630d868a
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" href="#"><i class="fas fa-user"></i> Resident Benefits</a></li>
               <li><a class="dropdown-item" href="#"><i class="fas fa-user"></i> Resident Resources</a></li>
             </ul>
           </li>
+<<<<<<< HEAD
+          <li class="nav-item dropdown spacing">
+            <a class="nav-link" href="#rentals" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false"><i class="fas fa-tasks fa-2x"></i></a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#"><i class="fas fa-tasks"></i> Residential For Rent</a></li>
+              <li><a class="dropdown-item" href="#"><i class="fas fa-tasks"></i> Commercial For Rent</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown spacing">
+            <a class="nav-link" href="#resources" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false"><i class="fas fa-shield-alt fa-2x"></i></a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#"><i class="fas fa-shield-alt"></i>PM Education Blog</a></li>
+              <li><a class="dropdown-item" href="#"><i class="fas fa-shield-alt"></i> Video Library</a></li>
+              <li><a class="dropdown-item" href="#"><i class="fas fa-shield-alt"></i> Free Rental Analysis</a></li>
+              <li><a class="dropdown-item" href="#"><i class="fas fa-shield-alt"></i> Vendors</a></li>
+              <li><a class="dropdown-item" href="#"><i class="fas fa-shield-alt"></i> Recommendation PM Companies</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown spacing">
+            <a class="nav-link" href="#about" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false"><i class="fas fa-info-circle fa-2x"></i></a>
+=======
           <li class="nav-item dropdown">
             <a class="nav-link" href="#rentals" role="button" data-bs-toggle="dropdown"
               aria-expanded="false"><i class="fas fa-tasks"></i>For Rent</a>
@@ -68,12 +118,32 @@
           <li class="nav-item dropdown">
             <a class="nav-link" href="#about" role="button" data-bs-toggle="dropdown"
               aria-expanded="false"><i class="fas fa-info-circle">Contacts</i></a>
+>>>>>>> 8ed179db4ccce604927cf581f887b2c4630d868a
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" href="#"><i class="fas fa-info-circle"></i> About Us/Meet The Team/Giving Back</a></li>
               <li><a class="dropdown-item" href="#"><i class="fas fa-info-circle"></i> Agents Referrals</a></li>
               <li><a class="dropdown-item" href="#"><i class="fas fa-info-circle"></i> Employment</a></li>
             </ul>
           </li>
+<<<<<<< HEAD
+          <li class="nav-item dropdown spacing">
+            <a class="nav-link" href="#for-sale" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false"><i class="fas fa-dollar-sign fa-2x"></i></a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#"><i class="fas fa-dollar-sign"></i> Residential For Sale</a></li>
+              <li><a class="dropdown-item" href="#"><i class="fas fa-dollar-sign"></i> Commercial For Sale</a></li>
+              <li><a class="dropdown-item" href="#"><i class="fas fa-dollar-sign"></i> Rent vs Sell calculator </a></li>
+              <li><a class="dropdown-item" href="#"><i class="fas fa-dollar-sign"></i> Rental Investment Calculator</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown spacing">
+            <a class="nav-link" href="#contact" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false"><i class="fas fa-phone fa-2x"></i></a>
+          </li>
+          <li class="nav-item dropdown spacing">
+            <a class="nav-link" href="#login" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false"><i class="fas fa-sign-in-alt fa-2x"></i></a>
+=======
           <li class="nav-item">
             <a class="nav-link" href="{{ url_for('main.accounts') }}" role="button" aria-expanded="false"><i class="fas fa-user">Profile</i></a>
           </li>
@@ -93,12 +163,16 @@
           <li class="nav-item dropdown">
             <a class="nav-link" href="#login" role="button" data-bs-toggle="dropdown"
               aria-expanded="false"><i class="fas fa-sign-in-alt"></i>Login</a>
+>>>>>>> 8ed179db4ccce604927cf581f887b2c4630d868a
             <ul class="dropdown-menu">
               <li class="spacing"><a class="dropdown-item" href="{{ url_for('tenant.login') }}"><i class="fas fa-sign-in-alt"></i> Resident Login</a></li>
               <li class="spacing"><a class="dropdown-item" href="{{ url_for('owner.login') }}"><i class="fas fa-sign-in-alt"></i> Owner Login</a></li>
             </ul>
           </li>
+<<<<<<< HEAD
+=======
           {% endif %}
+>>>>>>> 8ed179db4ccce604927cf581f887b2c4630d868a
         </ul>
       </div>
     </div>
@@ -106,6 +180,9 @@
 </header>
 
 <main>
+<<<<<<< HEAD
+
+=======
     <div class="flash-messages">
         {% with messages = get_flashed_messages(with_categories=true) %} {% if
         messages %} {% for category, message in messages %}
@@ -122,6 +199,7 @@
         </div>
         {% endfor %} {% endif %} {% endwith %}
         </div>
+>>>>>>> 8ed179db4ccce604927cf581f887b2c4630d868a
   <!-- Hero section -->
 <section id="home">
   <div class="hero">
@@ -136,7 +214,11 @@
           </a>
         </div>
         <div class="col-md-4 mb-4">
+<<<<<<< HEAD
+          <a href="#" class="icon-container text-decoration-none">
+=======
           <a href="{{ url_for('proprety.search_properties') }}" class="icon-container text-decoration-none">
+>>>>>>> 8ed179db4ccce604927cf581f887b2c4630d868a
             <i class="fa-solid fa-magnifying-glass-dollar"></i>
             <span>Search Rentals</span>
           </a>
@@ -185,8 +267,13 @@
     
     <div class="row mt-5">
       <div class="col-md-8 mx-auto text-center">
+<<<<<<< HEAD
+        <p class="lead">Join us today to experience the RealthyHub Property Management difference. Contact us to learn more about our services and how we can help you manage your property with peace of mind.</p>
+        <a href="#" class="btn btn-primary btn-lg">Get Started</a>
+=======
         <p class="lead">Join us today to explore a stunning selection of homes for rent and sale. Discover the perfect property that suits your lifestyle and needs. Start your journey with RealtyHub and experience the ease of finding your beautiful new home.</p>
         <a href="{{ url_for('tenant.register') }}" class="btn btn-primary btn-lg">Get Started</a>
+>>>>>>> 8ed179db4ccce604927cf581f887b2c4630d868a
       </div>
     </div>
   </div>
@@ -268,6 +355,78 @@
       </div>
     </div>
 </section>
+<<<<<<< HEAD
+
+<!-- Featured Properties -->
+<section id="featured-properties" class="py-5">
+  <div class="container">
+    <h2 class="text-center">Featured Properties</h2>
+    <div class="row mt-4">
+      <div class="col-md-4 mb-4">
+        <div class="card h-100">
+          <img src="img/property1.jpg" class="card-img-top" alt="Property 1">
+          <div class="card-body">
+            <h5 class="card-title">Luxury Apartment</h5>
+            <p class="card-text">Located in the heart of the city, this luxury apartment offers stunning views and modern amenities.</p>
+            <a href="#" class="btn btn-primary">View Details</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="card h-100">
+          <img src="img/property2.jpg" class="card-img-top" alt="Property 2">
+          <div class="card-body">
+            <h5 class="card-title">Suburban Home</h5>
+            <p class="card-text">Spacious suburban home with a large backyard, perfect for families looking for a peaceful retreat.</p>
+            <a href="#" class="btn btn-primary">View Details</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="card h-100">
+          <img src="img/property3.jpg" class="card-img-top" alt="Property 3">
+          <div class="card-body">
+            <h5 class="card-title">Commercial Space</h5>
+            <p class="card-text">Prime commercial space available for lease, ideal for businesses looking to expand their operations.</p>
+            <a href="#" class="btn btn-primary">View Details</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="card h-100">
+          <img src="img/property4.jpg" class="card-img-top" alt="Property 4">
+          <div class="card-body">
+            <h5 class="card-title">Luxury Apartment</h5>
+            <p class="card-text">Located in the heart of the city, this luxury apartment offers stunning views and modern amenities.</p>
+            <a href="#" class="btn btn-primary">View Details</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="card h-100">
+          <img src="img/property5.jpg" class="card-img-top" alt="Property 5">
+          <div class="card-body">
+            <h5 class="card-title">Luxury Apartment</h5>
+            <p class="card-text">Located in the heart of the city, this luxury apartment offers stunning views and modern amenities.</p>
+            <a href="#" class="btn btn-primary">View Details</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="card h-100">
+          <img src="img/property6.jpg" class="card-img-top" alt="Property 6">
+          <div class="card-body">
+            <h5 class="card-title">Luxury Apartment</h5>
+            <p class="card-text">Located in the heart of the city, this luxury apartment offers stunning views and modern amenities.</p>
+            <a href="#" class="btn btn-primary">View Details</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+=======
 <!-- Featured Properties -->
 <section id="featured-properties" class="py-5">
     <div class="container">
@@ -310,6 +469,7 @@
 </section>
 
 
+>>>>>>> 8ed179db4ccce604927cf581f887b2c4630d868a
 <!-- Contact Us -->
 <section id="contact" class="py-5">
   <div class="container">
@@ -357,6 +517,16 @@
     </div>
   </div>
 </footer>
+<<<<<<< HEAD
+
+
+
+
+</main>
+
+{% endblock %}
+=======
+<<<<<<< HEAD
 </main>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <!-- In your main template file or a separate JS file included in the base template -->
@@ -376,3 +546,69 @@
 
   </body>
 </html>
+>>>>>>> 8ed179db4ccce604927cf581f887b2c4630d868a
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Realty Hub Website</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS file -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('main.static', filename='home.css') }}">
+</head>
+<body>
+
+<header>
+    <div class="container">
+        <h1> Realty Hub </h1>
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Properties</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<section class="hero">
+    <div class="container">
+        <h2>Welcome to Your Dream Property</h2>
+        <p>Explore our collection of premium rental properties.</p>
+        <a href="#" class="btn">View Properties</a>
+    </div>
+</section>
+
+<section class="properties">
+    <div class="container">
+        <h2>Featured Properties</h2>
+        <div class="property">
+            <img src="property1.jpg" alt="Property 1">
+            <h3>Property Name</h3>
+            <p>Location: City, State</p>
+            <p>Rent: $XXX / month</p>
+            <a href="#" class="btn">View Details</a>
+        </div>
+        <div class="property">
+            <img src="property2.jpg" alt="Property 2">
+            <h3>Property Name</h3>
+            <p>Location: City, State</p>
+            <p>Rent: $XXX / month</p>
+            <a href="#" class="btn">View Details</a>
+        </div>
+        <!-- Add more properties as needed -->
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        <p>&copy; 2024 Property Rental Website. All rights reserved.</p>
+    </div>
+</footer>
+
+</body>
+</html>
+>>>>>>> origin/main
+>>>>>>> 147b6bacaaf3b300b443e7ec10095c592b97d748
