@@ -13,7 +13,7 @@
   <nav class="navbar navbar-expand-lg navbar-light">
     <div class="container-fluid">
       <!-- Logo aligned to the left -->
-      <a class="navbar-brand" href="#"><i class="fas fa-home"></i>RealtyHub</a>
+      <a class="navbar-brand" href="{{ url_for('main.home') }}"><i class="fas fa-home"></i>RealtyHub</a>
 
       <!-- Toggler button for mobile -->
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -29,9 +29,9 @@
             <a class="nav-link text-white" href="#owners-investors" role="button" data-bs-toggle="dropdown"
               aria-expanded="false"><i class="fas fa-th-large"></i>Property</a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#"><i class="fas fa-th-large"></i> Property Management</a></li>
-              <li><a class="dropdown-item" href="#"><i class="fas fa-th-large"></i> Pricing</a></li>
-              <li><a class="dropdown-item" href="#"><i class="fas fa-th-large"></i> Owner Guarantees</a></li>
+              <li><a class="dropdown-item" href="{{ url_for('proprety.create_property') }}"><i class="fas fa-th-large"></i>Create Property</a></li>
+              <li><a class="dropdown-item" href="{{ url_for('proprety.search_properties') }}"><i class="fas fa-th-large"></i> Search Property</a></li>
+              <li><a class="dropdown-item" href="{{ url_for('proprety.get_properties') }}"><i class="fas fa-th-large"></i> Show Properties</a></li>
               <li><a class="dropdown-item" href="#"><i class="fas fa-th-large"></i> Owner FAQs</a></li>
               <li><a class="dropdown-item" href="#"><i class="fas fa-th-large"></i> Free Rental Analysis</a></li>
               <li><a class="dropdown-item" href="#"><i class="fas fa-th-large"></i> Property Management Agreement</a></li>
@@ -56,16 +56,9 @@
               <li><a class="dropdown-item" href="#"><i class="fas fa-dollar-sign"></i> Commercial For Sale</a></li>
             </ul>
           </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link" href="#resources" role="button" data-bs-toggle="dropdown"
-              aria-expanded="false"><i class="fas fa-shield-alt">Resources</i></a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#"><i class="fas fa-shield-alt"></i>PM Education Blog</a></li>
-              <li><a class="dropdown-item" href="#"><i class="fas fa-shield-alt"></i> Video Library</a></li>
-              <li><a class="dropdown-item" href="#"><i class="fas fa-shield-alt"></i> Free Rental Analysis</a></li>
-              <li><a class="dropdown-item" href="#"><i class="fas fa-shield-alt"></i> Vendors</a></li>
-              <li><a class="dropdown-item" href="#"><i class="fas fa-shield-alt"></i> Recommendation PM Companies</a></li>
-            </ul>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('messages.allmessages') }}" role="button"
+              aria-expanded="false"><i class="fas fa-message">Messages</i></a>
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link" href="#about" role="button" data-bs-toggle="dropdown"
@@ -76,19 +69,14 @@
               <li><a class="dropdown-item" href="#"><i class="fas fa-info-circle"></i> Employment</a></li>
             </ul>
           </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link" href="#for-sale" role="button" data-bs-toggle="dropdown"
-              aria-expanded="false"><i class="fas fa-user">Calculator</i></a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#"><i class="fas fa-calculator"></i> Rent vs Sell calculator </a></li>
-              <li><a class="dropdown-item" href="#"><i class="fas fa-calculator"></i> Rental Investment Calculator</a></li>
-            </ul>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('main.accounts') }}" role="button" aria-expanded="false"><i class="fas fa-user">Profile</i></a>
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link" href="#contact" role="button" data-bs-toggle="dropdown"
               aria-expanded="false"><i class="fas fa-chart-line"></i>Dashboard</a>
             <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#"><i class="fas fa-chart-line"></i>Investor's Dashboard</a></li>
+                <li><a class="dropdown-item" href="{{ url_for('proprety.my_properties') }}"><i class="fas fa-chart-line"></i>Agent's Dashboard</a></li>
                 <li><a class="dropdown-item" href="#"><i class="fas fa-chart-line"></i>Resident's Dashboard</a></li>
             </ul>
           </li>

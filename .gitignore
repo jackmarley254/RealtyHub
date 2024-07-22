@@ -1,3 +1,2 @@
-__pycache__/
 *.pyc
-instance/mydatabase.db
+__pycache__/
