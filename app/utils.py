@@ -8,7 +8,7 @@ from flask_login import current_user, logout_user, login_required
 main = Blueprint('main', __name__, url_prefix="/home", template_folder='templates', static_folder='static')
 
 
-@main.route('/', methods=['GET', 'POST'], strict_slashes=False)
+@main.route('', methods=['GET', 'POST'], strict_slashes=False)
 def home():
     """Homepage"""
     unread_count = 0
